@@ -1,0 +1,12 @@
+[
+  {
+    "storeId": 1,
+    "storeName": "찌니네 반찬가게",
+    "storeImg": "./images/store1.jpeg"
+  },
+  {
+    "storeId": 2,
+    "storeName": "lina's hamberger",
+    "storeImg": "./images/store2.JPG"
+  }
+]
