@@ -1,10 +1,15 @@
 import { styled } from 'styled-components';
+import Nav from './Nav/Nav';
+import Footer from './Footer';
 
 const Frame = () => {
   return (
     <Full>
       <AD />
-      <Main />
+      <Right>
+        <Nav />
+        <Footer />
+      </Right>
     </Full>
   );
 };
@@ -29,7 +34,7 @@ const AD = styled.div`
   }
 `;
 
-const Main = styled.div`
+const Right = styled.div`
   width: 440px;
   height: 100vh;
   background-color: white;
