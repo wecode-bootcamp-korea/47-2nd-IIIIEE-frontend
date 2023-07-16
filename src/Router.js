@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Main from './pages/Main';
+import Gathering from './pages/Gathering';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import { styled } from 'styled-components';
 import Registration from './pages/Registration';
+import Gathering from './pages/Gathering';
 
 const Router = () => {
   return (
@@ -13,6 +15,7 @@ const Router = () => {
         <Route path="/" element={<Frame />}>
           <Route path="" element={<Main />} />
           <Route path="registration" element={<Registration />} />
+          <Route path="/gathering" element={<Gathering />} />
         </Route>
       </Routes>
     </BrowserRouter>
