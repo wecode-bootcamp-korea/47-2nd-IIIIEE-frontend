@@ -8,6 +8,9 @@ ${reset}
     font-family: 'Noto Sans KR', sans-serif;
     color: #333
   }
+  button {
+    cursor: pointer;
+  }
 `;
 
 export default GlobalStyle;
