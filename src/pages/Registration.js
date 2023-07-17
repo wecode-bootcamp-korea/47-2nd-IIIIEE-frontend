@@ -9,6 +9,7 @@ import useInputValue from '../hooks/useInputValue';
 import { FILTERRING_BOX } from '../components/Nav/NavData/filterListData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import useSelectBtn from '../hooks/useSelectBtn';
 
 const Registration = () => {
   const [value, onChange] = useState(new Date());
@@ -24,7 +25,15 @@ const Registration = () => {
     num: '',
     text: '',
   };
+
+  const allClickBtn = {
+    time: '00:00',
+    age: '',
+    gender: '',
+  };
+
   const { handleInput } = useInputValue(initInput);
+  const { clickBtn, handleClickButton } = useSelectBtn(allClickBtn);
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -33,7 +42,8 @@ const Registration = () => {
     reader.onloadend = () => {
       setUploadImg(reader.result);
     };
-    // console.log(imgRef.current.files[0].name);
+    // post api 나오면 사진 보낼때 사용하려고 남겨뒀어요
+    //console.log(imgRef.current.files[0].name);
   };
 
   const cancel = () => {
@@ -69,7 +79,7 @@ const Registration = () => {
       />
       <ModalBtn onClick={handleModal}>
         {moment(value).format('YYYY년 MM월 DD일')}
-        <p>시간 넣을 자리</p>
+        <p>{clickBtn.time}</p>
         <StyledIcon icon={faChevronDown} />
       </ModalBtn>
       {isOpen && (
@@ -77,14 +87,28 @@ const Registration = () => {
           <StyledCalendar onChange={onChange} value={value} />
           <TagBtns>
             {FILTERRING_BOX[0].select.map(time => {
-              return <button key={time.id}>{time.selectValue}</button>;
+              return (
+                <button
+                  key={time.id}
+                  onClick={handleClickButton}
+                  value={time.selectValue}
+                  name="time"
+                  style={{
+                    backgroundColor: `${
+                      clickBtn.time === time.selectValue ? '#fff6d6' : ''
+                    }`,
+                  }}
+                >
+                  {time.selectValue}
+                </button>
+              );
             })}
           </TagBtns>
         </DateBox>
       )}
       <PeoPleNum>
         <p>원하는 인원 수</p>
-        <input name="num" onChange={e => handleInput(e)} />
+        <input type="number" name="num" onChange={e => handleInput(e)} />
         <p>명</p>
       </PeoPleNum>
       <FileInput>
@@ -110,12 +134,40 @@ const Registration = () => {
       />
       <TagBtns>
         {FILTERRING_BOX[1].select.map(age => {
-          return <button key={age.id}>{age.selectValue}</button>;
+          return (
+            <button
+              key={age.id}
+              name="age"
+              value={age.selectValue}
+              onClick={handleClickButton}
+              style={{
+                backgroundColor: `${
+                  clickBtn.age === age.selectValue ? '#fff6d6' : ''
+                }`,
+              }}
+            >
+              {age.selectValue}
+            </button>
+          );
         })}
       </TagBtns>
       <TagBtns>
         {FILTERRING_BOX[2].select.map(gender => {
-          return <button key={gender.id}>{gender.selectValue}</button>;
+          return (
+            <button
+              key={gender.id}
+              value={gender.selectValue}
+              name="gender"
+              onClick={handleClickButton}
+              style={{
+                backgroundColor: `${
+                  clickBtn.gender === gender.selectValue ? '#fff6d6' : ''
+                }`,
+              }}
+            >
+              {gender.selectValue}
+            </button>
+          );
         })}
       </TagBtns>
       <TagBtn>
@@ -250,7 +302,7 @@ const PeoPleNum = styled.div`
   align-items: center;
   gap: 0.5em;
   input {
-    width: 2em;
+    width: 4em;
   }
 `;
 
@@ -285,6 +337,10 @@ const XBtn = styled.div`
   color: #b2afaf;
 `;
 
+const StyledIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+`;
+
 const StyledCalendar = styled(Calendar)`
   border: none;
   margin-bottom: 1em;
@@ -311,8 +367,4 @@ const StyledCalendar = styled(Calendar)`
   .react-calendar__tile:enabled:focus {
     border-radius: 10em;
   }
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
 `;
