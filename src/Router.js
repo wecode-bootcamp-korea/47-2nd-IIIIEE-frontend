@@ -4,6 +4,7 @@ import Main from './pages/Main';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import { styled } from 'styled-components';
+import Registration from './pages/Registration';
 
 const Router = () => {
   return (
@@ -11,6 +12,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Frame />}>
           <Route path="" element={<Main />} />
+          <Route path="registration" element={<Registration />} />
         </Route>
       </Routes>
     </BrowserRouter>
