@@ -13,6 +13,10 @@ ${reset}
     background: none;
     border: none;
   }
+  img{
+    display: block;
+    width:100%;
+  }
 `;
 
 export default GlobalStyle;

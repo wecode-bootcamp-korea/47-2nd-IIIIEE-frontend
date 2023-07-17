@@ -2,7 +2,9 @@ import { styled } from 'styled-components';
 
 export const Style = {
   RestaurantInfoBox: styled.div`
-    padding: 2em;
+    height: 100vh;
+    padding: 130px 1em 71px;
+    overflow: scroll;
   `,
   Img: styled.img`
     display: block;
@@ -23,5 +25,8 @@ export const Style = {
   `,
   Comments: styled.div`
     padding: 1em 0;
+  `,
+  MapBox: styled.div`
+    padding-bottom: 2em;
   `,
 };
