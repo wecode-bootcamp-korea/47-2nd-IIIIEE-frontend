@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Main from './pages/Main';
 import Gathering from './pages/Gathering';
-import Nav from './components/Nav';
-import Footer from './components/Footer';
+import Nav from './components/Nav/Nav';
+import Footer from './components/Footer/Footer';
 import { styled } from 'styled-components';
 import Registration from './pages/Registration';
 
@@ -59,6 +59,7 @@ const AD = styled.div`
 const Right = styled.div`
   width: 440px;
   height: 100vh;
+  overflow: scroll;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 8px;
 `;

@@ -22,9 +22,8 @@ const Footer = () => {
 export default Footer;
 
 const FooterBox = styled.div`
-  position: absolute;
   width: 440px;
-  padding: 1em;
+  padding: 1em 1em 71px 1em;
   background-color: #f7f7f7;
 
   p {

@@ -40,11 +40,9 @@ const Gathering = () => {
 
 const Full = styled.div`
   display: flex;
-  height: 100vh;
   flex-direction: column;
-  padding: 1em;
+  padding: 150px 1em 1em 1em;
   gap: 20px;
-  overflow: scroll;
 `;
 
 const GatheringImg = styled.img`

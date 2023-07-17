@@ -4,9 +4,11 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import { styled } from 'styled-components';
 import useModal from '../hooks/useModal';
-import { CATHEGORY_DATAS, TIME_DATAS } from './REGISTRATION_DATA';
 import { useNavigate } from 'react-router-dom';
 import useInputValue from '../hooks/useInputValue';
+import { FILTERRING_BOX } from '../components/Nav/NavData/filterListData';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const Registration = () => {
   const [value, onChange] = useState(new Date());
@@ -16,8 +18,6 @@ const Registration = () => {
   const navigate = useNavigate();
   const [eachTag, setEachTag] = useState('');
   const [arrTag, setArrTag] = useState([]);
-
-  console.log(arrTag);
 
   const initInput = {
     title: '',
@@ -33,6 +33,7 @@ const Registration = () => {
     reader.onloadend = () => {
       setUploadImg(reader.result);
     };
+    // console.log(imgRef.current.files[0].name);
   };
 
   const cancel = () => {
@@ -45,9 +46,17 @@ const Registration = () => {
 
   const createTag = () => {
     if (eachTag) {
-      setArrTag(eachTag);
+      setArrTag(arrTag => [...arrTag, eachTag]);
+      setEachTag('');
     } else {
       alert('글을 입력 후 클릭해주세요.');
+    }
+  };
+
+  const deleteTag = targetIdx => {
+    if (arrTag.length > 0) {
+      const newTag = arrTag.filter((tag, idx) => idx !== targetIdx);
+      setArrTag(newTag);
     }
   };
 
@@ -61,14 +70,16 @@ const Registration = () => {
       <ModalBtn onClick={handleModal}>
         {moment(value).format('YYYY년 MM월 DD일')}
         <p>시간 넣을 자리</p>
-        <p>더보기</p>
+        <StyledIcon icon={faChevronDown} />
       </ModalBtn>
       {isOpen && (
         <DateBox>
-          <Calendar onChange={onChange} value={value} />
-          {TIME_DATAS.map(TIME_DATA => {
-            return <button key={TIME_DATA.id}>{TIME_DATA.time}</button>;
-          })}
+          <StyledCalendar onChange={onChange} value={value} />
+          <TagBtns>
+            {FILTERRING_BOX[0].select.map(time => {
+              return <button key={time.id}>{time.selectValue}</button>;
+            })}
+          </TagBtns>
         </DateBox>
       )}
       <PeoPleNum>
@@ -97,19 +108,40 @@ const Registration = () => {
         name="text"
         onChange={e => handleInput(e)}
       />
-      <CathegoryBtn>
-        {CATHEGORY_DATAS.map(cathegory => {
-          return <button key={cathegory.id}>{cathegory.name}</button>;
+      <TagBtns>
+        {FILTERRING_BOX[1].select.map(age => {
+          return <button key={age.id}>{age.selectValue}</button>;
         })}
-      </CathegoryBtn>
+      </TagBtns>
+      <TagBtns>
+        {FILTERRING_BOX[2].select.map(gender => {
+          return <button key={gender.id}>{gender.selectValue}</button>;
+        })}
+      </TagBtns>
       <TagBtn>
-        <GatheringInput
-          placeholder="원하는 태그를 직접 입력해보세요."
-          name="tag"
-          onChange={e => handleTag(e)}
-        />
-        <button onClick={createTag}>추가</button>
+        <TagContainer>
+          <GatheringInput
+            placeholder="원하는 태그를 직접 입력해보세요."
+            name="tag"
+            value={eachTag}
+            onChange={e => handleTag(e)}
+          />
+          <button onClick={createTag}>추가</button>
+        </TagContainer>
+        <TagBtns>
+          {arrTag.map((tag, idx) => {
+            return (
+              <EachTagBtn key={idx}>
+                <p>{tag}</p>
+                <XBtn id={idx + 1} onClick={() => deleteTag(idx)}>
+                  x
+                </XBtn>
+              </EachTagBtn>
+            );
+          })}
+        </TagBtns>
       </TagBtn>
+
       <RegisteBtn>
         <button>등록</button>
         <button onClick={cancel}>취소</button>
@@ -120,9 +152,7 @@ const Registration = () => {
 export default Registration;
 
 const Full = styled.div`
-  padding: 1em;
-  height: 100vh;
-  overflow: scroll;
+  padding: 150px 1em 1em 1em;
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -135,11 +165,6 @@ const ModalBtn = styled.div`
 
 const GatheringImg = styled.img`
   width: 100%;
-`;
-
-const CathegoryBtn = styled.div`
-  display: flex;
-  gap: 1em;
 `;
 
 const RegisteBtn = styled.div`
@@ -172,21 +197,19 @@ const FileInput = styled.div`
 
 const TagBtn = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 0.5em;
-  button {
-    border: 1px solid lightgray;
-    border-radius: 7px;
-    background-color: white;
-    color: gray;
-  }
 `;
 
 const TextInput = styled.textarea`
   width: 100%;
+  min-height: 8em;
   padding: 1em;
   border: 1px solid lightgray;
   border-radius: 7px;
+  resize: none;
 `;
+
 const GatheringInput = styled.input`
   width: 100%;
   padding: 1em;
@@ -197,6 +220,29 @@ const GatheringInput = styled.input`
 const DateBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1em;
+`;
+
+const TagBtns = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  button {
+    cursor: pointer;
+    width: 4em;
+    padding: 0.5em;
+    border: 1px solid #999;
+    border-radius: 1em;
+    background: #fff;
+    color: ${props => props.theme.mainColor};
+    font-weight: 600;
+    font-size: 1em;
+
+    &:hover {
+      background: #fff6d6;
+    }
+  }
 `;
 
 const PeoPleNum = styled.div`
@@ -206,4 +252,67 @@ const PeoPleNum = styled.div`
   input {
     width: 2em;
   }
+`;
+
+const TagContainer = styled.div`
+  display: flex;
+  gap: 0.5em;
+  button {
+    width: 4em;
+    border: 1px solid lightgray;
+    border-radius: 7px;
+    background-color: white;
+    color: gray;
+  }
+`;
+
+const EachTagBtn = styled.div`
+  display: flex;
+  gap: 0.5em;
+  padding: 0.7em;
+  border: 1px solid #999;
+  border-radius: 1em;
+  background: #fff;
+  p {
+    color: ${props => props.theme.mainColor};
+    font-weight: 600;
+    font-size: 1em;
+  }
+`;
+
+const XBtn = styled.div`
+  cursor: pointer;
+  color: #b2afaf;
+`;
+
+const StyledCalendar = styled(Calendar)`
+  border: none;
+  margin-bottom: 1em;
+
+  .react-calendar__navigation__label__labelText {
+    font-size: 1.3em;
+  }
+
+  .react-calendar__month-view__weekdays {
+    font-size: 1em;
+  }
+
+  .react-calendar__tile--now {
+    background: #ffdcbc;
+    border-radius: 10em;
+  }
+
+  .react-calendar__tile--active {
+    background: ${props => props.theme.mainColor} !important;
+    border-radius: 10em;
+  }
+
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus {
+    border-radius: 10em;
+  }
+`;
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
 `;

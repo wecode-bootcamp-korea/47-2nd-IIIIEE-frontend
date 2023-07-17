@@ -60,8 +60,7 @@ const Full = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: scroll;
-  padding: 1em;
+  padding: 150px 1em 1em 1em;
 `;
 
 const StoreMain = styled.div`
