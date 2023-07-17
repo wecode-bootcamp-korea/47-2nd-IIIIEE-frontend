@@ -6,7 +6,6 @@ import Nav from './components/Nav';
 import Footer from './components/Footer';
 import { styled } from 'styled-components';
 import Registration from './pages/Registration';
-import Gathering from './pages/Gathering';
 
 const Router = () => {
   return (
@@ -15,7 +14,7 @@ const Router = () => {
         <Route path="/" element={<Frame />}>
           <Route path="" element={<Main />} />
           <Route path="registration" element={<Registration />} />
-          <Route path="/gathering" element={<Gathering />} />
+          <Route path="gathering" element={<Gathering />} />
         </Route>
       </Routes>
     </BrowserRouter>
