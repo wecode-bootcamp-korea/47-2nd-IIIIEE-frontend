@@ -6,7 +6,7 @@ ${reset}
   * {
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;
-    color: #333
+    color: #333;
   }
   button {
     cursor: pointer;
