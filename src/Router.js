@@ -39,6 +39,7 @@ const Frame = () => {
 const Full = styled.div`
   width: 100vw;
   height: 100vh;
+  overflow: scroll;
   background-color: #e9ecef;
   display: flex;
   justify-content: center;

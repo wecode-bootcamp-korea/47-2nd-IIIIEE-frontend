@@ -34,7 +34,9 @@ const Nav = () => {
           )}
         </div>
         <div className="navMenu logoBtn">
-          <Img src="./images/logo.png" alt="logo" />
+          <Link to="">
+            <Img src="./images/logo.png" alt="logo" />
+          </Link>
         </div>
         <Link className="navMenu loginBtn" to="/">
           <FontAwesomeIcon icon={faCircleUser} />
