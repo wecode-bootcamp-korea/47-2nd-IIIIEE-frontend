@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 const Main = () => {
   const [gatheringDatas, setGatheringData] = useState([]);
   const [storeDatas, setStoreData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleModal = id => {
+    setIsOpen(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     fetch('./data/mainStore.json')
@@ -18,14 +24,19 @@ const Main = () => {
       .then(result => setGatheringData(result));
   }, []);
 
+  const goToRegistragion = () => {
+    navigate('registration');
+  };
+
   return (
     <Full>
       {storeDatas.map(storeData => {
         return (
           <div key={storeData.storeId}>
             <StoreMain
+              title={storeData.storeId}
               onClick={() => {
-                setIsOpen(!isOpen);
+                handleModal(storeData.storeId);
               }}
             >
               <StoreImg alt="storeImg" src={storeData.storeImg} />
@@ -35,11 +46,11 @@ const Main = () => {
             </StoreMain>
             <Btns>
               <StoreBtn>맛집 정보</StoreBtn>
-              <StoreBtn>모임 등록</StoreBtn>
+              <StoreBtn onClick={goToRegistragion}>모임 등록</StoreBtn>
             </Btns>
-            {isOpen && (
+            {isOpen[storeData.storeId] && (
               <div>
-                {gatheringDatas.map((gatheringData, idx) => {
+                {gatheringDatas.map(gatheringData => {
                   return (
                     <Lists key={gatheringData.textId}>
                       <p>{gatheringData.title}</p>
@@ -59,7 +70,6 @@ export default Main;
 const Full = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 150px 1em 1em 1em;
 `;
 
