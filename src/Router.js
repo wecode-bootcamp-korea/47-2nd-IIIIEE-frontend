@@ -7,6 +7,7 @@ import Footer from './components/Footer/Footer';
 import { styled } from 'styled-components';
 import Registration from './pages/Registration';
 import RestaurantInfo from './pages/RestaurantInfo/RestaurantInfo';
+import HoseList from './pages/HostList/HoseList';
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
           <Route path="registration" element={<Registration />} />
           <Route path="gathering" element={<Gathering />} />
           <Route path="restaurantInfo" element={<RestaurantInfo />} />
+          <Route path="hostList" element={<HoseList />} />
         </Route>
       </Routes>
     </BrowserRouter>
