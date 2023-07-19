@@ -19,21 +19,27 @@ const Registration = () => {
   const navigate = useNavigate();
   const [eachTag, setEachTag] = useState('');
   const [arrTag, setArrTag] = useState([]);
+  const [visibleTime, setVisibleTime] = useState('00:00');
 
   const initInput = {
     title: '',
-    num: '',
+    num: '1',
     text: '',
   };
 
   const allClickBtn = {
-    time: '00:00',
+    time: '',
     age: '',
     gender: '',
   };
 
-  const { handleInput } = useInputValue(initInput);
+  const { inputValue, handleInput } = useInputValue(initInput);
   const { clickBtn, handleClickButton } = useSelectBtn(allClickBtn);
+
+  const handleClickTime = (e, value) => {
+    handleClickButton(e);
+    setVisibleTime(value);
+  };
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -70,6 +76,18 @@ const Registration = () => {
     }
   };
 
+  const numRegular = /[0-9]/g;
+  const alertNum = inputValue.num === 0 || inputValue.num === '';
+
+  const handleGatheringInput = e => {
+    const { value } = e.target;
+    if (value === '' || numRegular.test(value)) {
+      handleInput(e);
+    } else {
+      return;
+    }
+  };
+
   return (
     <Full>
       <GatheringInput
@@ -79,7 +97,7 @@ const Registration = () => {
       />
       <ModalBtn onClick={handleModal}>
         {moment(value).format('YYYY년 MM월 DD일')}
-        <p>{clickBtn.time}</p>
+        <p>{visibleTime}</p>
         <StyledIcon icon={faChevronDown} />
       </ModalBtn>
       {isOpen && (
@@ -90,8 +108,8 @@ const Registration = () => {
               return (
                 <button
                   key={time.id}
-                  onClick={handleClickButton}
-                  value={time.selectValue}
+                  onClick={e => handleClickTime(e, time.selectValue)}
+                  value={time.id}
                   name="time"
                   style={{
                     backgroundColor: `${
@@ -106,10 +124,19 @@ const Registration = () => {
           </TagBtns>
         </DateBox>
       )}
-      <PeoPleNum>
+      <PeoPleNum checkNum={alertNum}>
         <p>원하는 인원 수</p>
-        <input type="number" name="num" onChange={e => handleInput(e)} />
+        <input
+          value={inputValue.num}
+          name="num"
+          onChange={e => handleGatheringInput(e)}
+        />
         <p>명</p>
+        {alertNum && (
+          <AlertNumber alertNum={alertNum}>
+            인원수는 1 이상이어야 합니다.
+          </AlertNumber>
+        )}
       </PeoPleNum>
       <FileInput>
         <label for="file">
@@ -138,7 +165,7 @@ const Registration = () => {
             <button
               key={age.id}
               name="age"
-              value={age.selectValue}
+              value={age.id}
               onClick={handleClickButton}
               style={{
                 backgroundColor: `${
@@ -156,7 +183,7 @@ const Registration = () => {
           return (
             <button
               key={gender.id}
-              value={gender.selectValue}
+              value={gender.id}
               name="gender"
               onClick={handleClickButton}
               style={{
@@ -297,15 +324,6 @@ const TagBtns = styled.div`
   }
 `;
 
-const PeoPleNum = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  input {
-    width: 4em;
-  }
-`;
-
 const TagContainer = styled.div`
   display: flex;
   gap: 0.5em;
@@ -337,8 +355,22 @@ const XBtn = styled.div`
   color: #b2afaf;
 `;
 
+const PeoPleNum = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  input {
+    width: 4em;
+    border: 1px solid ${props => (props.alertNum ? 'black' : 'red')};
+  }
+`;
+
 const StyledIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
+`;
+
+const AlertNumber = styled.p`
+  color: red;
 `;
 
 const StyledCalendar = styled(Calendar)`
