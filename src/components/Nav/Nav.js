@@ -21,7 +21,7 @@ const Nav = () => {
           {openList && (
             <ListBox>
               <li>
-                <Link to="/">
+                <Link to="hostList">
                   <span>모임 목록</span>
                 </Link>
               </li>
