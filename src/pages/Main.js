@@ -24,8 +24,8 @@ const Main = () => {
       .then(result => setGatheringData(result));
   }, []);
 
-  const goToRegistragion = () => {
-    navigate('registration');
+  const goToLink = url => {
+    navigate(url);
   };
 
   return (
@@ -45,15 +45,21 @@ const Main = () => {
               </StoreName>
             </StoreMain>
             <Btns>
-              <StoreBtn>맛집 정보</StoreBtn>
-              <StoreBtn onClick={goToRegistragion}>모임 등록</StoreBtn>
+              <StoreBtn onClick={() => goToLink('restaurantInfo')}>
+                맛집 정보
+              </StoreBtn>
+              <StoreBtn onClick={() => goToLink('registration')}>
+                모임 등록
+              </StoreBtn>
             </Btns>
             {isOpen[storeData.storeId] && (
               <div>
                 {gatheringDatas.map(gatheringData => {
                   return (
                     <Lists key={gatheringData.textId}>
-                      <p>{gatheringData.title}</p>
+                      <p onClick={() => goToLink('gathering')}>
+                        {gatheringData.title}
+                      </p>
                     </Lists>
                   );
                 })}
