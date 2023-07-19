@@ -88,6 +88,16 @@ const Registration = () => {
     }
   };
 
+  const condition =
+    inputValue.title &&
+    inputValue.num !== '' &&
+    inputValue.num !== 0 &&
+    inputValue.text &&
+    clickBtn.time &&
+    clickBtn.age &&
+    clickBtn.gender &&
+    imgRef.current.files[0].name;
+
   return (
     <Full>
       <GatheringInput
@@ -113,7 +123,7 @@ const Registration = () => {
                   name="time"
                   style={{
                     backgroundColor: `${
-                      clickBtn.time === time.selectValue ? '#fff6d6' : ''
+                      Number(clickBtn.time) === time.id ? '#fff6d6' : ''
                     }`,
                   }}
                 >
@@ -169,7 +179,7 @@ const Registration = () => {
               onClick={handleClickButton}
               style={{
                 backgroundColor: `${
-                  clickBtn.age === age.selectValue ? '#fff6d6' : ''
+                  Number(clickBtn.age) === age.id ? '#fff6d6' : ''
                 }`,
               }}
             >
@@ -188,7 +198,7 @@ const Registration = () => {
               onClick={handleClickButton}
               style={{
                 backgroundColor: `${
-                  clickBtn.gender === gender.selectValue ? '#fff6d6' : ''
+                  Number(clickBtn.gender) === gender.id ? '#fff6d6' : ''
                 }`,
               }}
             >
@@ -221,10 +231,12 @@ const Registration = () => {
         </TagBtns>
       </TagBtn>
 
-      <RegisteBtn>
-        <button>등록</button>
+      <RegisteBtns>
+        <RegisteBtn disabled={!condition} condition={condition}>
+          등록
+        </RegisteBtn>
         <button onClick={cancel}>취소</button>
-      </RegisteBtn>
+      </RegisteBtns>
     </Full>
   );
 };
@@ -246,7 +258,7 @@ const GatheringImg = styled.img`
   width: 100%;
 `;
 
-const RegisteBtn = styled.div`
+const RegisteBtns = styled.div`
   display: flex;
   gap: 1em;
   button {
@@ -257,6 +269,16 @@ const RegisteBtn = styled.div`
     color: white;
     background-color: #ff914d;
   }
+`;
+
+const RegisteBtn = styled.button`
+  width: 50%;
+  height: 3em;
+  border: 0px;
+  border-radius: 7px;
+  color: white;
+  background-color: ${props => props.theme.mainColor};
+  opacity: ${props => (props.condition ? '1' : '0.5')};
 `;
 
 const FileInput = styled.div`
