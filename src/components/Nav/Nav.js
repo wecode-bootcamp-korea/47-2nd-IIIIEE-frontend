@@ -1,16 +1,38 @@
+/*global Kakao*/
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBars,
+  faCircleUser as regularCircleUser,
+} from '@fortawesome/free-solid-svg-icons';
+import { faCircleUser as solidCircleUser } from '@fortawesome/free-regular-svg-icons';
 import FilterBox from './FilterBox';
 
 const Nav = () => {
   const [openList, setOpenList] = useState(false);
+  const navigate = useNavigate();
 
+  const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const handleLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
   const handleListBtn = () => {
     setOpenList(!openList);
   };
+
+  const token = localStorage.getItem('token');
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   return (
     <div className="Nav">
       <FilterBox />
@@ -34,14 +56,21 @@ const Nav = () => {
           )}
         </div>
         <div className="navMenu logoBtn">
-          <Link to="">
+          <Link to="/">
             <Img src="./images/logo.png" alt="logo" />
           </Link>
         </div>
-        <Link className="navMenu loginBtn" to="/">
-          <FontAwesomeIcon icon={faCircleUser} />
-          <span>로그인</span>
-        </Link>
+        {token ? (
+          <button className="navMenu loginBtn" onClick={handleLogout}>
+            <FontAwesomeIcon icon={regularCircleUser} />
+            <span>로그아웃</span>
+          </button>
+        ) : (
+          <button className="navMenu loginBtn" onClick={handleLogin}>
+            <FontAwesomeIcon icon={solidCircleUser} />
+            <span>로그인 / 회원가입</span>
+          </button>
+        )}
       </NavBox>
     </div>
   );
@@ -52,8 +81,8 @@ export default Nav;
 const NavBox = styled.div`
   position: fixed;
   bottom: 0;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   width: 440px;
   height: 8vh;
@@ -64,6 +93,7 @@ const NavBox = styled.div`
   .navMenu {
     display: flex;
     flex-direction: column;
+    align-items: center;
     color: #333;
     text-decoration: none;
 
