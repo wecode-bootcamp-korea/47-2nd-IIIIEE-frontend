@@ -48,7 +48,7 @@ const Style = {
     text-align: justify;
   `,
 
-  Bold: styled.div`
+  Bold: styled.p`
     font-weight: 700;
     padding-left: 0.1em;
   `,
@@ -121,7 +121,6 @@ const Style = {
 
   Name: styled.div`
     display: flex;
-    justify-content: start;
     align-items: center;
     gap: 0.5em;
   `,
@@ -129,9 +128,20 @@ const Style = {
   AllStar: styled.div`
     display: flex;
     svg {
+      font-size: 1.3em;
+      path {
+        color: ${props => (props.star ? props.theme.mainColor : 'lightgray')};
+        cursor: pointer;
+      }
+    }
+  `,
+  GuestStar: styled.div`
+    display: flex;
+    top: 0px;
+    svg {
+      font-size: 1.3em;
       path {
         color: ${props => props.theme.mainColor};
-        cursor: pointer;
       }
     }
   `,
