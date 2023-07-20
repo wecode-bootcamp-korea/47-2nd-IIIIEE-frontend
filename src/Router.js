@@ -7,6 +7,7 @@ import Registration from './pages/Registration';
 import RestaurantInfo from './pages/RestaurantInfo/RestaurantInfo';
 import HoseList from './pages/HostList/HoseList';
 import KakaoLogin from './components/Nav/KakaoLogin';
+import GestList from './pages/GestList/GestList';
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
           <Route path="restaurantInfo" element={<RestaurantInfo />} />
           <Route path="hostList" element={<HoseList />} />
           <Route path="kakakoLogin" element={<KakaoLogin />} />
+          <Route path="gestList" element={<GestList />} />
         </Route>
       </Routes>
     </BrowserRouter>
