@@ -16,6 +16,9 @@ const FilterBox = () => {
   const handleFilterListBtn = () => {
     setOpenFilterList(!openFilterList);
   };
+
+  const getPathname = window.location.pathname;
+
   return (
     <>
       <Filter>
@@ -24,22 +27,26 @@ const FilterBox = () => {
             <FontAwesomeIcon icon={faChevronLeft} />
             이전
           </button>
-          <div className="filterSearch" onClick={handleFilterListBtn}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-            필터검색
-          </div>
+          {getPathname === '/' && (
+            <div className="filterSearch" onClick={handleFilterListBtn}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+              필터검색
+            </div>
+          )}
         </FilterTop>
-        <FilterBottom className="filterBottom">
-          <ul>
-            {FILTER_BOTTOM_LIST.map(borough => (
-              <li key={borough.id}>
-                <Link to={borough.link}>
-                  <span>{borough.text}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </FilterBottom>
+        {getPathname === '/' && (
+          <FilterBottom className="filterBottom">
+            <ul>
+              {FILTER_BOTTOM_LIST.map(borough => (
+                <li key={borough.id}>
+                  <Link to={borough.link}>
+                    <span>{borough.text}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </FilterBottom>
+        )}
       </Filter>
       {openFilterList && (
         <FilterList
