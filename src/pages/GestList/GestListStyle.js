@@ -14,6 +14,10 @@ export const GestListStyle = {
     padding: 2em 0;
     border-bottom: 1px solid lightgray;
 
+    &:first-child {
+      padding-top: 0;
+    }
+
     &:last-child {
       border-bottom: none;
     }

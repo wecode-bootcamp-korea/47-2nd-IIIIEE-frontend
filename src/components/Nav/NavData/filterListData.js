@@ -2,6 +2,7 @@ export const FILTERRING_BOX = [
   {
     id: 1,
     title: '시간',
+    titleEng: 'time',
     select: [
       { id: 1, selectValue: '00:00' },
       { id: 2, selectValue: '01:00' },
@@ -32,6 +33,7 @@ export const FILTERRING_BOX = [
   {
     id: 2,
     title: '연령대',
+    titleEng: 'age',
     select: [
       { id: 1, selectValue: '20대' },
       { id: 2, selectValue: '30대' },
@@ -46,6 +48,7 @@ export const FILTERRING_BOX = [
   {
     id: 3,
     title: '성별',
+    titleEng: 'gender',
     select: [
       { id: 1, selectValue: '남성' },
       { id: 2, selectValue: '여성' },
