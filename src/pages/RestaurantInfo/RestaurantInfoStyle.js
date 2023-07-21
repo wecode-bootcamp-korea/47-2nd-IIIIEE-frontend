@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 export const Style = {
   RestaurantInfoBox: styled.div`
     height: 100vh;
-    padding: 130px 1em 71px;
+    padding: 60px 1em 1em 1em;
     overflow: scroll;
   `,
   Img: styled.img`

@@ -120,7 +120,7 @@ const Img = styled.img`
 
 const ListBox = styled.ul`
   position: absolute;
-  top: -10.1em;
+  top: -10em;
   right: 0;
   display: flex;
   justify-content: center;

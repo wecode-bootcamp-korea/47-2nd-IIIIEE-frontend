@@ -243,7 +243,7 @@ const Registration = () => {
 export default Registration;
 
 const Full = styled.div`
-  padding: 150px 1em 1em 1em;
+  padding: 75px 1em 1em 1em;
   display: flex;
   flex-direction: column;
   gap: 1em;
