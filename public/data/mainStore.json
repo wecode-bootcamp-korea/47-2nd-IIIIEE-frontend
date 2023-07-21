@@ -2,11 +2,19 @@
   {
     "storeId": 1,
     "storeName": "찌니네 반찬가게",
-    "storeImg": "./images/store1.jpeg"
+    "images": [
+      { "id": 1, "image": "/images/food1.jpg" },
+      { "id": 2, "image": "/images/food2.jpg" },
+      { "id": 3, "image": "/images/food3.jpg" }
+    ]
   },
   {
     "storeId": 2,
     "storeName": "lina's hamberger",
-    "storeImg": "./images/store2.JPG"
+    "images": [
+      { "id": 1, "image": "/images/food1.jpg" },
+      { "id": 2, "image": "/images/food2.jpg" },
+      { "id": 3, "image": "/images/food3.jpg" }
+    ]
   }
 ]

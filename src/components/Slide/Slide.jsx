@@ -17,9 +17,13 @@ const Slide = ({ RestaurantInfoData }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  const getPathname = window.location.pathname;
+  const mainPath = getPathname === '/';
+
   return (
     <Style.Slide>
-      <CustomSlider {...settings}>
+      <CustomSlider {...settings} mainPath={mainPath}>
         {RestaurantInfoData?.images &&
           RestaurantInfoData?.images.map(info => (
             <div key={info.id}>
@@ -39,5 +43,8 @@ const CustomSlider = styled(Slider)`
   }
   .slick-next {
     display: none !important;
+  }
+  .slick-dots {
+    display: ${props => props.mainPath && 'none !important'};
   }
 `;

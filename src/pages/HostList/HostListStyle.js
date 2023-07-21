@@ -4,7 +4,7 @@ const HostListStyle = {
   Full: styled.div`
     display: flex;
     flex-direction: column;
-    padding: 150px 1em 1em 1em;
+    padding: 75px 1em 1em 1em;
     gap: 1.5em;
   `,
   Container: styled.div`

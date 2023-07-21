@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import Slide from '../components/Slide/Slide';
 
 const Main = () => {
   const [gatheringDatas, setGatheringData] = useState([]);
@@ -30,7 +31,7 @@ const Main = () => {
 
   return (
     <Full>
-      {storeDatas.map(storeData => {
+      {storeDatas.map((storeData, idx) => {
         return (
           <div key={storeData.storeId}>
             <StoreMain
@@ -39,7 +40,7 @@ const Main = () => {
                 handleModal(storeData.storeId);
               }}
             >
-              <StoreImg alt="storeImg" src={storeData.storeImg} />
+              <SlideStyle RestaurantInfoData={storeDatas[idx]} />
               <StoreName>
                 <NameColor>{storeData.storeName}</NameColor>
               </StoreName>
@@ -76,15 +77,15 @@ export default Main;
 const Full = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 150px 1em 1em 1em;
+  padding: 130px 1em 1em 1em;
 `;
 
 const StoreMain = styled.div`
   position: relative;
 `;
 
-const StoreImg = styled.img`
-  width: 100%;
+const SlideStyle = styled(Slide)`
+  position: relative;
 `;
 
 const StoreBtn = styled.button`
@@ -100,7 +101,7 @@ const StoreName = styled.p`
   background-color: rgba(0, 0, 0, 0.45);
   height: 3em;
   position: absolute;
-  top: 78%;
+  bottom: 1%;
   width: 100%;
   line-height: 3.2em;
 `;

@@ -4,7 +4,7 @@ export const GestListStyle = {
   GestListBox: styled.div`
     display: flex;
     flex-direction: column;
-    padding: 130px 1em 1em 1em;
+    padding: 75px 1em 1em 1em;
   `,
 
   Container: styled.div`
