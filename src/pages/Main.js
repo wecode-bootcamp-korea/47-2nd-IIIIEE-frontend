@@ -1,44 +1,44 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import Slide from '../components/Slide/Slide';
-import useFetch from '../hooks/useFetch';
 
 const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [restaurantList, setRestaurantList] = useState();
+  const [restaurantList, setRestaurantList] = useState([]);
   const navigate = useNavigate();
 
-  const { getData: storeDatas } = useFetch('/data/mainStore.json');
-  const { getData: gatheringDatas } = useFetch('/data/mainData.json');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  //TODO
-  // const { getData: restaurantDatas } = useFetch(
-  //   `http://${process.env.REACT_APP_IP}/restaurants/restaurantList`,
-  // );
-  // useEffect(() => {
-  //   const fetchCartData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `http://10.58.52.153:3000/restaurants/restaurantList`,
-  //         {
-  //           method: 'GET',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //           },
-  //         },
-  //       );
-  //       const result = await response.json();
-  //       if (Array.isArray(result.data)) {
-  //         setRestaurantList(result.data);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  useEffect(() => {
+    const district = searchParams.get('district');
+    const time = searchParams.get('time');
+    const age = searchParams.get('age');
+    const gender = searchParams.get('gender');
+    const date = searchParams.get('date');
 
-  //   fetchCartData();
-  // }, []);
+    const fetchCartData = async () => {
+      try {
+        const response = await fetch(
+          `http://${process.env.REACT_APP_IP}/restaurants/restaurantList?district=${district}&time=${time}&age=${age}&gender=${gender}&date=${date}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const result = await response.json();
+        if (Array.isArray(result.data)) {
+          setRestaurantList(result.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCartData();
+  }, [searchParams]);
 
   const handleModal = id => {
     setIsOpen(prev => ({ ...prev, [id]: !prev[id] }));
@@ -48,10 +48,12 @@ const Main = () => {
     navigate(url);
   };
 
+  const isEmpty = Object.keys(restaurantList).length === 0;
+  if (isEmpty) return null;
+
   return (
     <Full>
-      TODO
-      {/* {restaurantList?.data?.map((storeData, idx) => {
+      {restaurantList.map((storeData, idx) => {
         return (
           <div key={storeData.restaurantId}>
             <StoreMain
@@ -75,49 +77,11 @@ const Main = () => {
             </Btns>
             {isOpen[storeData.restaurantId] && (
               <div>
-                {restaurantList?.data?.roomsData?.map(gatheringData => {
+                {restaurantList.roomData.map(gatheringData => {
                   return (
-                    <Lists key={gatheringData.roomsId}>
+                    <Lists key={gatheringData.roomId}>
                       <p onClick={() => goToLink('gathering')}>
-                        {gatheringData.roomsTitle}
-                      </p>
-                    </Lists>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        );
-      })} */}
-      {storeDatas?.map((storeData, idx) => {
-        return (
-          <div key={storeData.storeId}>
-            <StoreMain
-              title={storeData.storeId}
-              onClick={() => {
-                handleModal(storeData.storeId);
-              }}
-            >
-              <SlideStyle RestaurantInfoData={storeDatas[idx]} />
-              <StoreName>
-                <NameColor>{storeData.storeName}</NameColor>
-              </StoreName>
-            </StoreMain>
-            <Btns>
-              <StoreBtn onClick={() => goToLink('restaurantInfo')}>
-                맛집 정보
-              </StoreBtn>
-              <StoreBtn onClick={() => goToLink('registration')}>
-                모임 등록
-              </StoreBtn>
-            </Btns>
-            {isOpen[storeData.storeId] && (
-              <div>
-                {gatheringDatas?.map(gatheringData => {
-                  return (
-                    <Lists key={gatheringData.textId}>
-                      <p onClick={() => goToLink('gathering')}>
-                        {gatheringData.title}
+                        {gatheringData.roomTitle}
                       </p>
                     </Lists>
                   );
