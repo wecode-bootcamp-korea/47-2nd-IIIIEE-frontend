@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
+
+import useSelectBtn from '../../hooks/useSelectBtn';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,12 +14,45 @@ import { FILTER_BOTTOM_LIST } from './NavData/filterBoxData';
 
 const FilterBox = () => {
   const [openFilterList, setOpenFilterList] = useState(false);
+  const [CalendarValue, onChange] = useState();
+  const [visible, setVisible] = useState({
+    time: '시간 추가',
+    age: '연령대 추가',
+    gender: '성별 추가',
+  });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleFilterListBtn = () => {
     setOpenFilterList(!openFilterList);
   };
 
-  const getPathname = window.location.pathname;
+  const allClickBtn = {
+    district: '',
+    time: '',
+    age: '',
+    gender: '',
+  };
+
+  const { clickBtn, handleClickButton } = useSelectBtn(allClickBtn);
+
+  const location = useLocation();
+
+  const handleClick = e => {
+    handleClickButton(e);
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    //비동기적인 상태 업데이트로 인한 문제 방지
+
+    clickBtn.district && params.append('district', clickBtn.district);
+    clickBtn.time && params.append('time', clickBtn.time);
+    clickBtn.age && params.append('age', clickBtn.age);
+    clickBtn.gender && params.append('gender', clickBtn.gender);
+    CalendarValue && params.append('Date', CalendarValue);
+
+    setSearchParams(params);
+  }, [clickBtn, openFilterList, CalendarValue]);
 
   return (
     <>
@@ -27,21 +62,32 @@ const FilterBox = () => {
             <FontAwesomeIcon icon={faChevronLeft} />
             이전
           </button>
-          {getPathname === '/' && (
+          {location.pathname === '/' && (
             <div className="filterSearch" onClick={handleFilterListBtn}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
               필터검색
             </div>
           )}
         </FilterTop>
-        {getPathname === '/' && (
+        {location.pathname === '/' && (
           <FilterBottom className="filterBottom">
             <ul>
-              {FILTER_BOTTOM_LIST.map(borough => (
-                <li key={borough.id}>
-                  <Link to={borough.link}>
-                    <span>{borough.text}</span>
-                  </Link>
+              {FILTER_BOTTOM_LIST.map(district => (
+                <li key={district.id}>
+                  <button
+                    onClick={e => handleClick(e, district.selectValue)}
+                    value={district.id}
+                    name="district"
+                    style={{
+                      color: `${
+                        parseInt(clickBtn.district) === district.id
+                          ? '#000'
+                          : '#999'
+                      }`,
+                    }}
+                  >
+                    {district.selectValue}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -50,6 +96,14 @@ const FilterBox = () => {
       </Filter>
       {openFilterList && (
         <FilterList
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          visible={visible}
+          setVisible={setVisible}
+          CalendarValue={CalendarValue}
+          onChange={onChange}
+          clickBtn={clickBtn}
+          handleClickButton={handleClickButton}
           openFilterList={openFilterList}
           handleFilterListBtn={handleFilterListBtn}
         />
@@ -131,15 +185,12 @@ const FilterBottom = styled.div`
   ul {
     display: flex;
     li {
+      display: flex;
       text-align: center;
-      a {
+      button {
         display: block;
-        width: 4em;
+        width: 4.5em;
         text-decoration: none;
-
-        span {
-          color: #999;
-        }
       }
     }
   }

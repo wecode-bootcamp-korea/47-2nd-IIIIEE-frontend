@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
+
+import { FILTERRING_BOX } from './NavData/filterListData';
+
 import { styled } from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-import { FILTERRING_BOX } from './NavData/filterListData';
-
 import Calendar from 'react-calendar';
 import moment from 'moment';
-
 import 'react-calendar/dist/Calendar.css';
 
-const FilterList = ({ openFilterList, handleFilterListBtn }) => {
+const FilterList = ({
+  searchParams,
+  setSearchParams,
+  openFilterList,
+  CalendarValue,
+  onChange,
+  handleFilterListBtn,
+  clickBtn,
+  handleClickButton,
+  visible,
+  setVisible,
+}) => {
   const [openList, setOpenList] = useState(false);
-  const [value, onChange] = useState(new Date());
 
   const handleListBtn = title => {
     setOpenList(prev => ({
       ...prev,
       [title]: !prev[title],
     }));
+  };
+
+  const handleClick = e => {
+    handleClickButton(e);
+
+    const { name, innerText } = e.target;
+    setVisible({ ...visible, [name]: innerText });
   };
 
   return (
@@ -32,29 +49,45 @@ const FilterList = ({ openFilterList, handleFilterListBtn }) => {
           <div className="filtering">
             <div className="text" onClick={() => handleListBtn('날짜')}>
               <p>날짜</p>
-              <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+              <span>{moment(CalendarValue).format('YYYY년 MM월 DD일')}</span>
             </div>
             {openList['날짜'] && (
-              <StyledCalendar onChange={onChange} value={value} />
+              <StyledCalendar onChange={onChange} value={CalendarValue} />
             )}
           </div>
-          {FILTERRING_BOX.map(info => (
-            <div className="filtering" key={info.id}>
-              <div className="text" onClick={() => handleListBtn(info.title)}>
-                <p>{info.title}</p>
-                <span>{info.title} 추가</span>
+
+          {FILTERRING_BOX &&
+            FILTERRING_BOX.map(data => (
+              <div className="filtering" key={data.id}>
+                <div className="text" onClick={() => handleListBtn(data.title)}>
+                  <p>{data.title}</p>
+                  <span>{visible[data.titleEng]}</span>
+                </div>
+
+                {openList[data.title] && (
+                  <ul>
+                    {data.select.map(info => (
+                      <li key={info.id}>
+                        <button
+                          onClick={e => handleClick(e, info.selectValue)}
+                          value={info.id}
+                          name={data.titleEng}
+                          style={{
+                            backgroundColor: `${
+                              Number(clickBtn[data.titleEng]) === info.id
+                                ? '#fff6d6'
+                                : ''
+                            }`,
+                          }}
+                        >
+                          {info.selectValue}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              {openList[info.title] && (
-                <ul>
-                  {info.select.map(data => (
-                    <li key={data.id}>
-                      <button>{data.selectValue}</button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
+            ))}
         </div>
       )}
     </FilterListBox>
