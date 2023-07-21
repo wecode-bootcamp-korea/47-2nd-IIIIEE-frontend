@@ -8,12 +8,12 @@ const useStarRating = () => {
     setRate(id);
   };
 
-  const totalRating = hostData => {
+  const totalRating = score => {
     let allStarRating = 0;
     let plusRating = 0;
-    for (let i = 0; i < hostData.reviews?.length; i++) {
-      allStarRating += hostData.reviews[i].star;
-      plusRating = allStarRating / hostData.reviews?.length;
+    for (let i = 0; i < score.length; i++) {
+      allStarRating += Number(score[i].rating);
+      plusRating = allStarRating / score.length;
     }
     return plusRating;
   };
