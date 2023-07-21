@@ -1,5 +1,5 @@
 /*global Kakao*/
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +13,6 @@ import FilterBox from './FilterBox';
 const Nav = () => {
   const [openList, setOpenList] = useState(false);
   const navigate = useNavigate();
-
   const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
   const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 
@@ -34,6 +33,21 @@ const Nav = () => {
     navigate('/');
   };
 
+  const listBoxRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = e => {
+      if (listBoxRef.current && !listBoxRef.current.contains(e.target)) {
+        setOpenList(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="Nav">
       <FilterBox />
@@ -42,7 +56,7 @@ const Nav = () => {
           <FontAwesomeIcon icon={faBars} onClick={handleListBtn} />
           <span>목록</span>
           {openList && (
-            <ListBox>
+            <ListBox ref={listBoxRef}>
               <li>
                 <Link to="hostlist">
                   <span>모임 목록</span>
@@ -58,7 +72,7 @@ const Nav = () => {
         </div>
         <div className="navMenu logoBtn">
           <Link to="/">
-            <Img src="./images/logo.png" alt="logo" />
+            <Img src="/images/logo.png" alt="logo" />
           </Link>
         </div>
         {token ? (

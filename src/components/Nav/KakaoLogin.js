@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const KakaoLogin = () => {
   const navigate = useNavigate();
+
   const KAKAO_CODE = new URL(document.location).searchParams.get('code');
 
   useEffect(() => {

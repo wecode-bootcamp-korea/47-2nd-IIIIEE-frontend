@@ -14,28 +14,24 @@ import FilterList from './FilterList';
 
 const FilterBox = () => {
   const [openFilterList, setOpenFilterList] = useState(false);
-  const [calendarValue, onChange] = useState(new Date());
+  const [calendarValue, onChange] = useState();
   const [visible, setVisible] = useState({
     time: '시간 추가',
     age: '연령대 추가',
     gender: '성별 추가',
   });
+  const [dateTypeChange, setDateTypeChange] = useState();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleFilterListBtn = () => {
     setOpenFilterList(!openFilterList);
   };
 
-  const gangnamgu = '1';
-  const oneHour = '1';
-  const ageUnrelated = '8';
-  const genderUnrelated = '3';
-
   const allClickBtn = {
-    district: gangnamgu,
-    time: oneHour,
-    age: ageUnrelated,
-    gender: genderUnrelated,
+    district: '',
+    time: '',
+    age: '',
+    gender: '',
   };
 
   const { clickBtn, handleClickButton } = useSelectBtn(allClickBtn);
@@ -47,25 +43,23 @@ const FilterBox = () => {
   };
 
   useEffect(() => {
-    const dateTypeChanege = `${calendarValue.getFullYear()}-${(
-      calendarValue.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, '0')}-${calendarValue
-      .getDate()
-      .toString()
-      .padStart(2, '0')}`;
+    if (calendarValue) {
+      const dateTypeChangeValue = `${calendarValue.getFullYear()}-${
+        calendarValue.getMonth() + 1
+      }-${calendarValue.getDate()}`;
+      setDateTypeChange(dateTypeChangeValue);
+    }
 
     const params = new URLSearchParams();
 
-    params.append('district', clickBtn.district);
-    params.append('time', clickBtn.time);
-    params.append('age', clickBtn.age);
-    params.append('gender', clickBtn.gender);
-    params.append('date', dateTypeChanege);
+    clickBtn.district && params.append('district', clickBtn.district);
+    clickBtn.time && params.append('time', clickBtn.time);
+    clickBtn.age && params.append('age', clickBtn.age);
+    clickBtn.gender && params.append('gender', clickBtn.gender);
+    dateTypeChange && params.append('date', dateTypeChange);
 
     setSearchParams(params);
-  }, [clickBtn, openFilterList, calendarValue]);
+  }, [clickBtn, openFilterList, calendarValue, dateTypeChange]);
 
   const { getData: districtDatas } = useFetch(
     `http://${process.env.REACT_APP_IP}/restaurants/categories/districts`,

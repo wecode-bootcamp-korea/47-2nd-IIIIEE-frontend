@@ -147,6 +147,9 @@ const FilterList = ({
               </ul>
             )}
           </div>
+          <Application onClick={handleFilterListBtn}>
+            <span>적용하기</span>
+          </Application>
         </div>
       )}
     </FilterListBox>
@@ -171,6 +174,22 @@ const CloseBtn = styled.button`
     path {
       color: #999;
     }
+  }
+`;
+
+const Application = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 2.5em;
+  margin-bottom: 1em;
+  font-size: 1.2em;
+  border-radius: 0.5em;
+  background: ${props => props.theme.mainColor};
+
+  span {
+    color: #fff;
   }
 `;
 

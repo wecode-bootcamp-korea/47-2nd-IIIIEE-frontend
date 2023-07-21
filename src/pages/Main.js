@@ -10,17 +10,33 @@ const Main = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    const district = searchParams.get('district');
-    const time = searchParams.get('time');
-    const age = searchParams.get('age');
-    const gender = searchParams.get('gender');
-    const date = searchParams.get('date');
+  const district = searchParams.get('district');
+  const time = searchParams.get('time');
+  const age = searchParams.get('age');
+  const gender = searchParams.get('gender');
+  const date = searchParams.get('date');
 
+  const today = new Date();
+  const todayTypeChange = `${today.getFullYear()}-${
+    today.getMonth() + 1
+  }-${today.getDate()}`;
+
+  const gangnamgu = '1';
+  const oneHour = '1';
+  const ageUnrelated = '8';
+  const genderUnrelated = '3';
+
+  useEffect(() => {
     const fetchCartData = async () => {
       try {
         const response = await fetch(
-          `http://${process.env.REACT_APP_IP}/restaurants/restaurantList?district=${district}&time=${time}&age=${age}&gender=${gender}&date=${date}`,
+          `http://${
+            process.env.REACT_APP_IP
+          }/restaurants/restaurantList?district=${district || gangnamgu}&time=${
+            time || oneHour
+          }&age=${age || ageUnrelated}&gender=${
+            gender || genderUnrelated
+          }&date=${date || todayTypeChange}`,
           {
             method: 'GET',
             headers: {
@@ -42,6 +58,10 @@ const Main = () => {
 
   const handleModal = id => {
     setIsOpen(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const goToRestaurantInfo = id => {
+    navigate(`/restaurantInfo/${id}/`);
   };
 
   const goToLink = url => {
@@ -68,10 +88,12 @@ const Main = () => {
               </StoreName>
             </StoreMain>
             <Btns>
-              <StoreBtn onClick={() => goToLink('restaurantInfo')}>
+              <StoreBtn
+                onClick={() => goToRestaurantInfo(storeData.restaurantId)}
+              >
                 맛집 정보
               </StoreBtn>
-              <StoreBtn onClick={() => goToLink('registration')}>
+              <StoreBtn onClick={() => goToLink(`registration`)}>
                 모임 등록
               </StoreBtn>
             </Btns>
@@ -80,7 +102,7 @@ const Main = () => {
                 {restaurantList.roomData.map(gatheringData => {
                   return (
                     <Lists key={gatheringData.roomId}>
-                      <p onClick={() => goToLink('gathering')}>
+                      <p onClick={() => goToLink(`gathering`)}>
                         {gatheringData.roomTitle}
                       </p>
                     </Lists>
