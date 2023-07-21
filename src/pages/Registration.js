@@ -6,10 +6,10 @@ import { styled } from 'styled-components';
 import useModal from '../hooks/useModal';
 import { useNavigate } from 'react-router-dom';
 import useInputValue from '../hooks/useInputValue';
-import { FILTERRING_BOX } from '../components/Nav/NavData/filterListData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import useSelectBtn from '../hooks/useSelectBtn';
+import useFetch from '../hooks/useFetch';
 
 const Registration = () => {
   const [value, onChange] = useState(new Date());
@@ -20,6 +20,9 @@ const Registration = () => {
   const [eachTag, setEachTag] = useState('');
   const [arrTag, setArrTag] = useState([]);
   const [visibleTime, setVisibleTime] = useState('00:00');
+  const { getData: ageDatas } = useFetch('/data/age.json');
+  const { getData: genderDatas } = useFetch('data/gender.json');
+  const { getData: timeDatas } = useFetch('data/time.json');
 
   const initInput = {
     title: '',
@@ -114,11 +117,11 @@ const Registration = () => {
         <DateBox>
           <StyledCalendar onChange={onChange} value={value} />
           <TagBtns>
-            {FILTERRING_BOX[0].select.map(time => {
+            {timeDatas?.data?.map(time => {
               return (
                 <button
                   key={time.id}
-                  onClick={e => handleClickTime(e, time.selectValue)}
+                  onClick={e => handleClickTime(e, time.hour)}
                   value={time.id}
                   name="time"
                   style={{
@@ -127,7 +130,7 @@ const Registration = () => {
                     }`,
                   }}
                 >
-                  {time.selectValue}
+                  {time.hour}
                 </button>
               );
             })}
@@ -170,7 +173,7 @@ const Registration = () => {
         onChange={e => handleInput(e)}
       />
       <TagBtns>
-        {FILTERRING_BOX[1].select.map(age => {
+        {ageDatas?.data?.slice(0, 8).map(age => {
           return (
             <button
               key={age.id}
@@ -183,26 +186,26 @@ const Registration = () => {
                 }`,
               }}
             >
-              {age.selectValue}
+              {age.age_range}
             </button>
           );
         })}
       </TagBtns>
       <TagBtns>
-        {FILTERRING_BOX[2].select.map(gender => {
+        {genderDatas?.data?.slice(0, 3).map(genders => {
           return (
             <button
-              key={gender.id}
-              value={gender.id}
+              key={genders.id}
+              value={genders.id}
               name="gender"
               onClick={handleClickButton}
               style={{
                 backgroundColor: `${
-                  Number(clickBtn.gender) === gender.id ? '#fff6d6' : ''
+                  Number(clickBtn.gender) === genders.id ? '#fff6d6' : ''
                 }`,
               }}
             >
-              {gender.selectValue}
+              {genders.gender}
             </button>
           );
         })}

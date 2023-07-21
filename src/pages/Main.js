@@ -1,29 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import Slide from '../components/Slide/Slide';
+import useFetch from '../hooks/useFetch';
 
 const Main = () => {
-  const [gatheringDatas, setGatheringData] = useState([]);
-  const [storeDatas, setStoreData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { getData: storeDatas } = useFetch('/data/mainStore.json');
+  const { getData: gatheringDatas } = useFetch('/data/mainData.json');
 
   const handleModal = id => {
     setIsOpen(prev => ({ ...prev, [id]: !prev[id] }));
   };
-
-  useEffect(() => {
-    fetch('./data/mainStore.json')
-      .then(response => response.json())
-      .then(result => setStoreData(result));
-  }, []);
-
-  useEffect(() => {
-    fetch('./data/mainData.json')
-      .then(response => response.json())
-      .then(result => setGatheringData(result));
-  }, []);
 
   const goToLink = url => {
     navigate(url);
@@ -31,7 +21,7 @@ const Main = () => {
 
   return (
     <Full>
-      {storeDatas.map((storeData, idx) => {
+      {storeDatas?.map((storeData, idx) => {
         return (
           <div key={storeData.storeId}>
             <StoreMain
@@ -55,7 +45,7 @@ const Main = () => {
             </Btns>
             {isOpen[storeData.storeId] && (
               <div>
-                {gatheringDatas.map(gatheringData => {
+                {gatheringDatas?.map(gatheringData => {
                   return (
                     <Lists key={gatheringData.textId}>
                       <p onClick={() => goToLink('gathering')}>
