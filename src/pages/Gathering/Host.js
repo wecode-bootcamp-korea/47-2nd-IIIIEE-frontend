@@ -69,7 +69,7 @@ const Host = ({ textData }) => {
       <Style.Title>이 글의 host는 ?</Style.Title>
       <Style.Description>
         <Style.Left>
-          <Style.HostImg alt="hostimg" src="./images/IMG_7631.jpg" />
+          <Style.HostImg alt="hostimg" src="/images/IMG_7631.jpg" />
           <Style.ProfileBold>{hostName}</Style.ProfileBold>
         </Style.Left>
         <Style.Right>

@@ -4,9 +4,10 @@ import Host from './Host';
 import Style from './GatheringStyle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-// import Icon from '../../components/icon/icon';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Gathering = () => {
+  const loading = useRequireAuth();
   const token = localStorage.getItem('token');
   const [textData, setTextData] = useState({});
   const {
@@ -56,6 +57,10 @@ const Gathering = () => {
         }
       });
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Style.Full>

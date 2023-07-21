@@ -3,10 +3,10 @@ import { styled } from 'styled-components';
 import { renderToStaticMarkup } from 'react-dom/server';
 const { kakao } = window;
 
-const Map = ({ RestaurantInfoData }) => {
+const Map = ({ restaurantInfoData }) => {
   const position = new kakao.maps.LatLng(
-    RestaurantInfoData?.y,
-    RestaurantInfoData?.x,
+    restaurantInfoData?.y,
+    restaurantInfoData?.x,
   );
 
   const mapContainer = useRef(null);
@@ -36,7 +36,7 @@ const Map = ({ RestaurantInfoData }) => {
 
     const content = renderToStaticMarkup(
       <MargetText>
-        <span>{RestaurantInfoData?.name}</span>
+        <span>{restaurantInfoData?.name}</span>
       </MargetText>,
     );
 
@@ -47,7 +47,7 @@ const Map = ({ RestaurantInfoData }) => {
     });
 
     marker.setMap(map);
-  }, [RestaurantInfoData]);
+  }, [restaurantInfoData]);
 
   return (
     <div

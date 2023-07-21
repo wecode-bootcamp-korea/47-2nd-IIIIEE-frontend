@@ -11,8 +11,10 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import useSelectBtn from '../../hooks/useSelectBtn';
 import style from './RegistrationStyle';
 import useFetch from '../../hooks/useFetch';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Registration = () => {
+  const loading = useRequireAuth();
   const [value, onChange] = useState(new Date());
   const [uploadImg, setUploadImg] = useState(null);
   const imgRef = useRef();
@@ -170,6 +172,10 @@ const Registration = () => {
     clickBtn.time &&
     clickBtn.age &&
     clickBtn.gender;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <style.Full>

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import HostListStyle from './HostListStyle';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const HoseList = () => {
+  const loading = useRequireAuth();
   const [listData, setListData] = useState([]);
   const REACT_APP_SERVICE_APP_ADMIN_KEY =
     process.env.REACT_APP_SERVICE_APP_ADMIN_KEY;
@@ -50,6 +52,10 @@ const HoseList = () => {
         }
       });
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <HostListStyle.Full>
