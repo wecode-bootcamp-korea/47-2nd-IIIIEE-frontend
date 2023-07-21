@@ -14,7 +14,7 @@ import FilterList from './FilterList';
 
 const FilterBox = () => {
   const [openFilterList, setOpenFilterList] = useState(false);
-  const [CalendarValue, onChange] = useState();
+  const [calendarValue, onChange] = useState(new Date());
   const [visible, setVisible] = useState({
     time: '시간 추가',
     age: '연령대 추가',
@@ -26,11 +26,16 @@ const FilterBox = () => {
     setOpenFilterList(!openFilterList);
   };
 
+  const gangnamgu = '1';
+  const oneHour = '1';
+  const ageUnrelated = '8';
+  const genderUnrelated = '3';
+
   const allClickBtn = {
-    district: '',
-    time: '',
-    age: '',
-    gender: '',
+    district: gangnamgu,
+    time: oneHour,
+    age: ageUnrelated,
+    gender: genderUnrelated,
   };
 
   const { clickBtn, handleClickButton } = useSelectBtn(allClickBtn);
@@ -42,16 +47,25 @@ const FilterBox = () => {
   };
 
   useEffect(() => {
+    const dateTypeChanege = `${calendarValue.getFullYear()}-${(
+      calendarValue.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, '0')}-${calendarValue
+      .getDate()
+      .toString()
+      .padStart(2, '0')}`;
+
     const params = new URLSearchParams();
 
-    clickBtn.district && params.append('district', clickBtn.district);
-    clickBtn.time && params.append('time', clickBtn.time);
-    clickBtn.age && params.append('age', clickBtn.age);
-    clickBtn.gender && params.append('gender', clickBtn.gender);
-    CalendarValue && params.append('Date', CalendarValue);
+    params.append('district', clickBtn.district);
+    params.append('time', clickBtn.time);
+    params.append('age', clickBtn.age);
+    params.append('gender', clickBtn.gender);
+    params.append('date', dateTypeChanege);
 
     setSearchParams(params);
-  }, [clickBtn, openFilterList, CalendarValue]);
+  }, [clickBtn, openFilterList, calendarValue]);
 
   const { getData: districtDatas } = useFetch(
     `http://${process.env.REACT_APP_IP}/restaurants/categories/districts`,
@@ -103,7 +117,7 @@ const FilterBox = () => {
           setSearchParams={setSearchParams}
           visible={visible}
           setVisible={setVisible}
-          CalendarValue={CalendarValue}
+          calendarValue={calendarValue}
           onChange={onChange}
           clickBtn={clickBtn}
           handleClickButton={handleClickButton}

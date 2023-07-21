@@ -22,6 +22,7 @@ const Nav = () => {
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
+
   const handleListBtn = () => {
     setOpenList(!openList);
   };

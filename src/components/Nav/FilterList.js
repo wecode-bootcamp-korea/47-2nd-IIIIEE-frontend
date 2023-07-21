@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import useFetch from '../../hooks/useFetch';
 
-import { FILTERRING_BOX } from './NavData/filterListData';
-
 import { styled } from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,7 +13,7 @@ import 'react-calendar/dist/Calendar.css';
 
 const FilterList = ({
   openFilterList,
-  CalendarValue,
+  calendarValue,
   onChange,
   handleFilterListBtn,
   clickBtn,
@@ -59,10 +57,10 @@ const FilterList = ({
           <div className="filtering">
             <div className="text" onClick={() => handleListBtn('날짜')}>
               <p>날짜</p>
-              <span>{moment(CalendarValue).format('YYYY년 MM월 DD일')}</span>
+              <span>{moment(calendarValue).format('YYYY년 MM월 DD일')}</span>
             </div>
             {openList['날짜'] && (
-              <StyledCalendar onChange={onChange} value={CalendarValue} />
+              <StyledCalendar onChange={onChange} value={calendarValue} />
             )}
           </div>
 
@@ -77,7 +75,7 @@ const FilterList = ({
                 {timeDatas?.data?.map(time => (
                   <li key={time.id}>
                     <button
-                      onClick={e => handleClick(e, time.hour)}
+                      onClick={e => handleClick(e)}
                       value={time.id}
                       name="time"
                       style={{
@@ -105,7 +103,7 @@ const FilterList = ({
                 {ageDatas?.data?.map(age => (
                   <li key={age.id}>
                     <button
-                      onClick={e => handleClick(e, age.age_range)}
+                      onClick={e => handleClick(e)}
                       value={age.id}
                       name="age"
                       style={{
@@ -114,7 +112,7 @@ const FilterList = ({
                         }`,
                       }}
                     >
-                      {age.age_range}
+                      {age.ageRange}
                     </button>
                   </li>
                 ))}
@@ -133,7 +131,7 @@ const FilterList = ({
                 {genderDatas?.data?.map(gender => (
                   <li key={gender.id}>
                     <button
-                      onClick={e => handleClick(e, gender.gender)}
+                      onClick={e => handleClick(e)}
                       value={gender.id}
                       name="gender"
                       style={{
