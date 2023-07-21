@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "age_range": "20대"
+    },
+    {
+      "id": 2,
+      "age_range": "30대"
+    },
+    {
+      "id": 3,
+      "age_range": "40대"
+    },
+    {
+      "id": 4,
+      "age_range": "50대"
+    },
+    {
+      "id": 5,
+      "age_range": "60대"
+    },
+    {
+      "id": 6,
+      "age_range": "70대"
+    },
+    {
+      "id": 7,
+      "age_range": "80대"
+    },
+    {
+      "id": 8,
+      "age_range": "무관"
+    },
+    {
+      "id": 9,
+      "age_range": "지정안함"
+    }
+  ]
+}
