@@ -1,12 +1,11 @@
 import { styled } from 'styled-components';
 
-const Tag = ({ cathegorys, tags }) => {
+const Tag = ({ gender, ageRange, tags }) => {
   return (
     <Container>
       <Cathegorys>
-        {cathegorys?.map((cathegory, idx) => {
-          return <EachCathegorys key={idx}>{cathegory}</EachCathegorys>;
-        })}
+        <EachCathegorys>{gender}</EachCathegorys>
+        <EachCathegorys>{ageRange}</EachCathegorys>
       </Cathegorys>
       <Cathegorys>
         {tags?.map((tag, idx) => {

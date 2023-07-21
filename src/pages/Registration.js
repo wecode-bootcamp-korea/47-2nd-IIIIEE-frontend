@@ -23,6 +23,7 @@ const Registration = () => {
   const { getData: ageDatas } = useFetch('/data/age.json');
   const { getData: genderDatas } = useFetch('data/gender.json');
   const { getData: timeDatas } = useFetch('data/time.json');
+  const token = localStorage.getItem('token');
 
   const initInput = {
     title: '',
@@ -100,6 +101,42 @@ const Registration = () => {
     clickBtn.age &&
     clickBtn.gender &&
     imgRef.current.files[0].name;
+
+  const createRoom = () => {
+    fetch('http://52.78.25.104:3000/rooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        restaurantId: 9,
+        hostId: 3,
+        title: inputValue.title,
+        date: value,
+        timeId: clickBtn.time,
+        maxNum: inputValue.num,
+        image: 'test',
+        content: inputValue.text,
+        ageId: clickBtn.age,
+        genderId: clickBtn.gender,
+        tag: arrTag,
+        roomStatusId: 1,
+      }),
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        if (data.message === 'ROOM_CREATED') {
+          navigate('hostlist');
+        } else if (data.message === 'INVALID_DATA_INPUT') {
+          alert('입력사항 다시 확인해주세요.');
+        } else if (data.message === 'EXISTED_DATA_INPUT') {
+          alert('이미 예약된 모임이 있습니다.');
+        }
+      });
+  };
 
   return (
     <Full>
@@ -235,7 +272,11 @@ const Registration = () => {
       </TagBtn>
 
       <RegisteBtns>
-        <RegisteBtn disabled={!condition} condition={condition}>
+        <RegisteBtn
+          disabled={!condition}
+          condition={condition}
+          onClick={createRoom}
+        >
           등록
         </RegisteBtn>
         <button onClick={cancel}>취소</button>

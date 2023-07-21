@@ -3,23 +3,42 @@ import HostListStyle from './HostListStyle';
 
 const HoseList = () => {
   const [listData, setListData] = useState([]);
+  // const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetch('./data/listData.json')
+      // fetch('http://52.78.25.104:3000/rooms/host', {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // })
       .then(response => response.json())
-      .then(result => setListData(result));
+      .then(result => setListData(result.data));
   }, []);
 
   return (
     <HostListStyle.Full>
       {listData.map(list => {
-        const { roomId, roomName, guests, price, date, time } = list;
+        const {
+          roomId,
+          roomTitle,
+          guests,
+          price,
+          hour,
+          roomYear,
+          roomMonth,
+          roomDay,
+        } = list;
         return (
           <HostListStyle.Container key={roomId}>
-            <HostListStyle.Title>{roomName}</HostListStyle.Title>
+            <HostListStyle.Title>{roomTitle}</HostListStyle.Title>
             <HostListStyle.GatheringData>
-              <p>{date}</p>
-              <p>{time}</p>
+              <p>
+                {roomYear}년 {roomMonth}월 {roomDay}일
+              </p>
+              <p>{hour}</p>
               <p>{price?.toLocaleString()}원</p>
             </HostListStyle.GatheringData>
             {guests.map(guest => {

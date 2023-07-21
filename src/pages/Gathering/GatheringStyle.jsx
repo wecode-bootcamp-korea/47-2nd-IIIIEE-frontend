@@ -40,12 +40,18 @@ const Style = {
 
   Top: styled.div`
     display: flex;
-    gap: 1.3em;
-    justify-content: center;
+    gap: 0.7em;
+    justify-content: start;
   `,
 
   Border: styled.div`
     border-top: ${props => props.theme.borderDiv};
+  `,
+
+  RoomTitle: styled.p`
+    color: ${props => props.theme.mainColor};
+    font-size: 2em;
+    font-weight: 700;
   `,
 };
 

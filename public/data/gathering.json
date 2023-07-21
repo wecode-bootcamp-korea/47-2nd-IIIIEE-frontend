@@ -1,0 +1,33 @@
+{
+  "data": {
+    "roomId": 19,
+    "restaurantId": 6,
+    "restaurantName": "restaurant6",
+    "roomImage": "/images/logo.png",
+    "roomTitle": "양동희의 식도락여행",
+    "price": 80000.0,
+    "genderId": 3,
+    "gender": "여성",
+    "ageId": 3,
+    "ageRange": "40대",
+    "roomTag": ["직장인", "혼밥", "싫어요"],
+    "roomContent": "같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요. 같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요.같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요.같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요.같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요.같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요.같이 밥먹어요. 해치지 않아요. 안 무서워요. 고기 잘 구워요.",
+    "roomYear": "2023",
+    "roomMonth": "7",
+    "roomDay": "20",
+    "reservationTime": "02:00",
+    "numberOfRoomPeople": "2",
+    "roomMaxPeople": 5,
+    "roomStatus": 1,
+    "roomStatusName": "CREATED",
+    "hostId": 1,
+    "hostName": "찌니최",
+    "hostGender": "여성",
+    "hostAge": "20대",
+    "hostNickname": null,
+    "hostBirthdate": null,
+    "hostProfileImage": null,
+    "hostEmail": null,
+    "hostPhoneNumber": null
+  }
+}

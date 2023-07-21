@@ -1,38 +1,52 @@
-[
-  {
-    "roomId": "1",
-    "roomName": "양동희의 식도락여행",
-    "guests": [
-      { "id": 1, "name": "하대리" },
-      { "id": 2, "name": "이주현" }
-    ],
-
-    "price": 80000,
-    "date": "2023년 7월 31일",
-    "time": "13:00"
-  },
-  {
-    "roomId": "2",
-    "roomName": "양동희랑 고기먹기",
-    "guests": [
-      { "id": 1, "name": "하대리" },
-      { "id": 2, "name": "이주현" }
-    ],
-
-    "price": 80000,
-    "date": "2023년 7월 31일",
-    "time": "18:00"
-  },
-  {
-    "roomId": "3",
-    "roomName": "양동희가 좋아하는 연어타임",
-    "guests": [
-      { "id": 1, "name": "하대리" },
-      { "id": 2, "name": "이주현" }
-    ],
-
-    "price": 50000,
-    "date": "2023년 8월 1일",
-    "time": "13:00"
-  }
-]
+{
+  "data": [
+    {
+      "roomId": 6,
+      "roomTitle": "양동희의 식도락여행",
+      "restaurantId": 1,
+      "restaurantName": "r1",
+      "image": null,
+      "roomYear": "2023",
+      "roomMonth": "7",
+      "roomDay": "20",
+      "hour": "14:00",
+      "price": 80000,
+      "guests": [
+        { "id": 1, "name": "하대리" },
+        { "id": 2, "name": "이주현" }
+      ]
+    },
+    {
+      "roomId": 2,
+      "roomTitle": "양동희가 좋아하는 연어타임",
+      "restaurantId": 3,
+      "restaurantName": "r1",
+      "image": null,
+      "roomYear": "2023",
+      "roomMonth": "7",
+      "roomDay": "21",
+      "hour": "14:00",
+      "price": 50000,
+      "guests": [
+        { "id": 1, "name": "하대리" },
+        { "id": 2, "name": "이주현" }
+      ]
+    },
+    {
+      "roomId": 5,
+      "roomTitle": "양동희랑 고기먹기",
+      "restaurantId": 5,
+      "restaurantName": "r1",
+      "image": null,
+      "roomYear": "2023",
+      "roomMonth": "7",
+      "roomDay": "22",
+      "hour": "12:00",
+      "price": 70000,
+      "guests": [
+        { "id": 1, "name": "하대리" },
+        { "id": 2, "name": "이주현" }
+      ]
+    }
+  ]
+}

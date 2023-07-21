@@ -21,7 +21,7 @@ const Router = () => {
           <Route path="restaurantInfo" element={<RestaurantInfo />} />
           <Route path="hostList" element={<HoseList />} />
           <Route path="kakakoLogin" element={<KakaoLogin />} />
-          <Route path="gestList" element={<GestList />} />
+          <Route path="gestlist" element={<GestList />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
