@@ -3,13 +3,14 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import { styled } from 'styled-components';
-import useModal from '../hooks/useModal';
+import useModal from '../../hooks/useModal';
 import { useNavigate } from 'react-router-dom';
-import useInputValue from '../hooks/useInputValue';
+import useInputValue from '../../hooks/useInputValue';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import useSelectBtn from '../hooks/useSelectBtn';
-import useFetch from '../hooks/useFetch';
+import useSelectBtn from '../../hooks/useSelectBtn';
+import style from './RegistrationStyle';
+import useFetch from '../../hooks/useFetch';
 
 const Registration = () => {
   const [value, onChange] = useState(new Date());
@@ -20,9 +21,11 @@ const Registration = () => {
   const [eachTag, setEachTag] = useState('');
   const [arrTag, setArrTag] = useState([]);
   const [visibleTime, setVisibleTime] = useState('00:00');
+  const [afterPost, setAfterPost] = useState(false);
   const { getData: ageDatas } = useFetch('/data/age.json');
   const { getData: genderDatas } = useFetch('data/gender.json');
   const { getData: timeDatas } = useFetch('data/time.json');
+
   const token = localStorage.getItem('token');
 
   const initInput = {
@@ -45,6 +48,8 @@ const Registration = () => {
     setVisibleTime(value);
   };
 
+  const formData = new FormData();
+
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
@@ -52,12 +57,77 @@ const Registration = () => {
     reader.onloadend = () => {
       setUploadImg(reader.result);
     };
-    // post api 나오면 사진 보낼때 사용하려고 남겨뒀어요
-    //console.log(imgRef.current.files[0].name);
+    formData.append('image', file);
+    // console.log(imgRef.current.files[0]);
+    // for (let value of formData.values()) {
+    //   console.log('>>', value);
+    // }
+  };
+
+  const postImg = () => {
+    fetch('http://52.78.25.104:3000/rooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        formData,
+      }),
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        if (data.message === 'IMAGE_UPLOAD_SUCCESS') {
+          navigate('hostlist');
+        } else if (data.message === 'INVALID_DATA') {
+          alert('이미지 업로드에 실패했습니다. 다시 확인해주세요.');
+        }
+      });
+  };
+
+  const createRoom = () => {
+    fetch('http://52.78.25.104:3000/rooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        restaurantId: 9,
+        hostId: 3,
+        title: inputValue.title,
+        date: value,
+        timeId: clickBtn.time,
+        maxNum: inputValue.num,
+        content: inputValue.text,
+        ageId: clickBtn.age,
+        genderId: clickBtn.gender,
+        tag: arrTag,
+        roomStatusId: 1,
+      }),
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        if (data.message === 'ROOM_CREATED') {
+          setAfterPost(true);
+        } else if (data.message === 'INVALID_DATA_INPUT') {
+          alert('입력사항 다시 확인해주세요.');
+        } else if (data.message === 'EXISTED_DATA_INPUT') {
+          alert('이미 예약된 모임이 있습니다.');
+        }
+      });
   };
 
   const cancel = () => {
     navigate('/');
+  };
+
+  const cancelImg = () => {
+    setAfterPost(false);
   };
 
   const handleTag = e => {
@@ -99,61 +169,24 @@ const Registration = () => {
     inputValue.text &&
     clickBtn.time &&
     clickBtn.age &&
-    clickBtn.gender &&
-    imgRef.current.files[0].name;
-
-  const createRoom = () => {
-    fetch('http://52.78.25.104:3000/rooms', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        restaurantId: 9,
-        hostId: 3,
-        title: inputValue.title,
-        date: value,
-        timeId: clickBtn.time,
-        maxNum: inputValue.num,
-        image: 'test',
-        content: inputValue.text,
-        ageId: clickBtn.age,
-        genderId: clickBtn.gender,
-        tag: arrTag,
-        roomStatusId: 1,
-      }),
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        if (data.message === 'ROOM_CREATED') {
-          navigate('hostlist');
-        } else if (data.message === 'INVALID_DATA_INPUT') {
-          alert('입력사항 다시 확인해주세요.');
-        } else if (data.message === 'EXISTED_DATA_INPUT') {
-          alert('이미 예약된 모임이 있습니다.');
-        }
-      });
-  };
+    clickBtn.gender;
 
   return (
-    <Full>
-      <GatheringInput
+    <style.Full>
+      <style.GatheringInput
         placeholder="모임 제목을 적어주세요."
         name="title"
         onChange={e => handleInput(e)}
       />
-      <ModalBtn onClick={handleModal}>
+      <style.ModalBtn onClick={handleModal}>
         {moment(value).format('YYYY년 MM월 DD일')}
         <p>{visibleTime}</p>
         <StyledIcon icon={faChevronDown} />
-      </ModalBtn>
+      </style.ModalBtn>
       {isOpen && (
-        <DateBox>
+        <style.DateBox>
           <StyledCalendar onChange={onChange} value={value} />
-          <TagBtns>
+          <style.TagBtns>
             {timeDatas?.data?.map(time => {
               return (
                 <button
@@ -171,10 +204,10 @@ const Registration = () => {
                 </button>
               );
             })}
-          </TagBtns>
-        </DateBox>
+          </style.TagBtns>
+        </style.DateBox>
       )}
-      <PeoPleNum checkNum={alertNum}>
+      <style.PeoPleNum checkNum={alertNum}>
         <p>원하는 인원 수</p>
         <input
           value={inputValue.num}
@@ -183,33 +216,17 @@ const Registration = () => {
         />
         <p>명</p>
         {alertNum && (
-          <AlertNumber alertNum={alertNum}>
+          <style.AlertNumber alertNum={alertNum}>
             인원수는 1 이상이어야 합니다.
-          </AlertNumber>
+          </style.AlertNumber>
         )}
-      </PeoPleNum>
-      <FileInput>
-        <label for="file">
-          이 곳을 클릭해 모임을 대표할 사진을 올려주세요.
-        </label>
-        <input
-          type="file"
-          accept="image/*"
-          id="file"
-          onChange={saveImgFile}
-          ref={imgRef}
-        />
-      </FileInput>
-      <GatheringImg
-        src={uploadImg ? uploadImg : './images/logo.png'}
-        alt="모임 이미지"
-      />
-      <TextInput
+      </style.PeoPleNum>
+      <style.TextInput
         placeholder="모임 내용에 대해 상세히 적어주세요."
         name="text"
         onChange={e => handleInput(e)}
       />
-      <TagBtns>
+      <style.TagBtns>
         {ageDatas?.data?.slice(0, 8).map(age => {
           return (
             <button
@@ -223,220 +240,98 @@ const Registration = () => {
                 }`,
               }}
             >
-              {age.age_range}
+              {age.ageRange}
             </button>
           );
         })}
-      </TagBtns>
-      <TagBtns>
-        {genderDatas?.data?.slice(0, 3).map(genders => {
+      </style.TagBtns>
+      <style.TagBtns>
+        {genderDatas?.data?.slice(0, 3).map(gender => {
           return (
             <button
-              key={genders.id}
-              value={genders.id}
+              key={gender.id}
+              value={gender.id}
               name="gender"
               onClick={handleClickButton}
               style={{
                 backgroundColor: `${
-                  Number(clickBtn.gender) === genders.id ? '#fff6d6' : ''
+                  Number(clickBtn.gender) === gender.id ? '#fff6d6' : ''
                 }`,
               }}
             >
-              {genders.gender}
+              {gender.gender}
             </button>
           );
         })}
-      </TagBtns>
-      <TagBtn>
-        <TagContainer>
-          <GatheringInput
+      </style.TagBtns>
+      <style.TagBtn>
+        <style.TagContainer>
+          <style.GatheringInput
             placeholder="원하는 태그를 직접 입력해보세요."
             name="tag"
             value={eachTag}
             onChange={e => handleTag(e)}
           />
           <button onClick={createTag}>추가</button>
-        </TagContainer>
-        <TagBtns>
+        </style.TagContainer>
+        <style.TagBtns>
           {arrTag.map((tag, idx) => {
             return (
-              <EachTagBtn key={idx}>
+              <style.EachTagBtn key={idx}>
                 <p>{tag}</p>
-                <XBtn id={idx + 1} onClick={() => deleteTag(idx)}>
+                <style.XBtn id={idx + 1} onClick={() => deleteTag(idx)}>
                   x
-                </XBtn>
-              </EachTagBtn>
+                </style.XBtn>
+              </style.EachTagBtn>
             );
           })}
-        </TagBtns>
-      </TagBtn>
+        </style.TagBtns>
+      </style.TagBtn>
 
-      <RegisteBtns>
-        <RegisteBtn
+      <style.RegisteBtns>
+        <style.RegisteBtn
           disabled={!condition}
           condition={condition}
           onClick={createRoom}
         >
           등록
-        </RegisteBtn>
+        </style.RegisteBtn>
         <button onClick={cancel}>취소</button>
-      </RegisteBtns>
-    </Full>
+      </style.RegisteBtns>
+      <style.ImgBox>
+        <style.FileForm>
+          <label for="file">
+            이 곳을 클릭해 모임을 대표할 사진을 올려주세요.
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            id="file"
+            onChange={saveImgFile}
+            ref={imgRef}
+          />
+        </style.FileForm>
+        <style.GatheringImg
+          src={uploadImg ? uploadImg : './images/logo.png'}
+          alt="모임 이미지"
+        />
+        <style.RegisteBtns>
+          <style.RegisteBtn
+            disabled={!imgRef?.current?.files[0]?.name}
+            condition={imgRef?.current?.files[0]?.name}
+            onClick={postImg}
+          >
+            등록
+          </style.RegisteBtn>
+          <button onClick={cancelImg}>취소</button>
+        </style.RegisteBtns>
+      </style.ImgBox>
+    </style.Full>
   );
 };
 export default Registration;
-
-const Full = styled.div`
-  padding: 75px 1em 1em 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-`;
-
-const ModalBtn = styled.div`
-  display: flex;
-  gap: 0.5em;
-`;
-
-const GatheringImg = styled.img`
-  width: 100%;
-`;
-
-const RegisteBtns = styled.div`
-  display: flex;
-  gap: 1em;
-  button {
-    width: 50%;
-    height: 3em;
-    border: 0px;
-    border-radius: 7px;
-    color: white;
-    background-color: #ff914d;
-  }
-`;
-
-const RegisteBtn = styled.button`
-  width: 50%;
-  height: 3em;
-  border: 0px;
-  border-radius: 7px;
-  color: white;
-  background-color: ${props => props.theme.mainColor};
-  opacity: ${props => (props.condition ? '1' : '0.5')};
-`;
-
-const FileInput = styled.div`
-  width: 100%;
-  padding: 1em;
-  border: 1px solid lightgray;
-  border-radius: 7px;
-
-  label {
-    color: #ff914d;
-  }
-
-  input {
-    display: none;
-  }
-`;
-
-const TagBtn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-`;
-
-const TextInput = styled.textarea`
-  width: 100%;
-  min-height: 8em;
-  padding: 1em;
-  border: 1px solid lightgray;
-  border-radius: 7px;
-  resize: none;
-`;
-
-const GatheringInput = styled.input`
-  width: 100%;
-  padding: 1em;
-  border: 1px solid lightgray;
-  border-radius: 7px;
-`;
-
-const DateBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1em;
-`;
-
-const TagBtns = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3em;
-  button {
-    cursor: pointer;
-    width: 4em;
-    padding: 0.5em;
-    border: 1px solid #999;
-    border-radius: 1em;
-    background: #fff;
-    color: ${props => props.theme.mainColor};
-    font-weight: 600;
-    font-size: 1em;
-
-    &:hover {
-      background: #fff6d6;
-    }
-  }
-`;
-
-const TagContainer = styled.div`
-  display: flex;
-  gap: 0.5em;
-  button {
-    width: 4em;
-    border: 1px solid lightgray;
-    border-radius: 7px;
-    background-color: white;
-    color: gray;
-  }
-`;
-
-const EachTagBtn = styled.div`
-  display: flex;
-  gap: 0.5em;
-  padding: 0.7em;
-  border: 1px solid #999;
-  border-radius: 1em;
-  background: #fff;
-  p {
-    color: ${props => props.theme.mainColor};
-    font-weight: 600;
-    font-size: 1em;
-  }
-`;
-
-const XBtn = styled.div`
-  cursor: pointer;
-  color: #b2afaf;
-`;
-
-const PeoPleNum = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  input {
-    width: 4em;
-    border: 1px solid ${props => (props.alertNum ? 'black' : 'red')};
-  }
-`;
-
 const StyledIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
-`;
-
-const AlertNumber = styled.p`
-  color: red;
 `;
 
 const StyledCalendar = styled(Calendar)`

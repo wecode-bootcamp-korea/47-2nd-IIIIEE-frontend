@@ -4,7 +4,7 @@
       "id": 6,
       "name": "신동현",
       "gender": "남성",
-      "age_range": "20대",
+      "ageRange": "20대",
       "content": "소개대로 정말 착해요.",
       "rating": "4"
     },
@@ -12,7 +12,7 @@
       "id": 5,
       "name": "최진이",
       "gender": "여성",
-      "age_range": "20대",
+      "ageRange": "20대",
       "content": "놀리기 좋아요.",
       "rating": "5"
     }
