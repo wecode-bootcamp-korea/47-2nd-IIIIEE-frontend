@@ -8,6 +8,7 @@ import RestaurantInfo from './pages/RestaurantInfo/RestaurantInfo';
 import HoseList from './pages/HostList/HoseList';
 import KakaoLogin from './components/Nav/KakaoLogin';
 import GestList from './pages/GestList/GestList';
+import NotFound from './pages/NotFound/NotFound';
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
           <Route path="kakakoLogin" element={<KakaoLogin />} />
           <Route path="gestList" element={<GestList />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
