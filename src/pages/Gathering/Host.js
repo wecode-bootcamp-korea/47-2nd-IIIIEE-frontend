@@ -42,7 +42,7 @@ const Host = ({ textData }) => {
       body: JSON.stringify({
         hostId: 1,
         content: addReviewText,
-        room_id: 1,
+        roomId: 1,
         rating: rate,
       }),
     })
