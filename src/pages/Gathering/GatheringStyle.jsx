@@ -28,6 +28,14 @@ const Style = {
     padding: 10px;
     display: flex;
     gap: 10px;
+    svg {
+      font-size: 1em;
+      path {
+        color: ${props =>
+          props.checkBell ? props.theme.mainColor : 'lightgray'};
+        cursor: pointer;
+      }
+    }
   `,
 
   Top: styled.div`

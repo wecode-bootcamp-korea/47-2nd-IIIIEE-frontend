@@ -9,11 +9,11 @@ const Icon = name => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_1_5720)">
-        <path d={icon[name]} fill="lightgray" />
+      <g clip-path="url(#clip0_1_6045)">
+        <path d={icon[name]} fill="#1A1A1A" />
       </g>
       <defs>
-        <clipPath id="clip0_1_5720">
+        <clipPath id="clip0_1_6045">
           <rect width="24" height="24" fill="white" />
         </clipPath>
       </defs>
