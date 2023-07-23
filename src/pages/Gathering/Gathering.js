@@ -2,9 +2,13 @@ import Tag from '../../components/Tag';
 import { useEffect, useState } from 'react';
 import Host from './Host';
 import Style from './GatheringStyle';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
+// import Icon from '../../components/icon/icon';
 
 const Gathering = () => {
   const [textData, setTextData] = useState({});
+  const [checkBell, setCheckBell] = useState(false);
 
   useEffect(() => {
     fetch('/data/text.json')
@@ -18,8 +22,14 @@ const Gathering = () => {
       <Tag cathegorys={textData?.cathegory} tags={textData?.tag} />
       <p>{textData.discription}</p>
       <Style.Top>
-        <Style.Container>
-          <p>알림</p>
+        <Style.Container
+          checkBell={checkBell}
+          onClick={() => {
+            setCheckBell(!checkBell);
+          }}
+        >
+          {/* <Icon name="bell" /> */}
+          <FontAwesomeIcon icon={faBell} />
         </Style.Container>
         <Style.Container>
           <p>{textData.date}</p>
