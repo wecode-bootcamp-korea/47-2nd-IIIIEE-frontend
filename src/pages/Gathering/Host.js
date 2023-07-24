@@ -33,7 +33,7 @@ const Host = ({ textData }) => {
     //   alert('글을 입력 후 클릭해주세요.');
     // }
 
-    fetch('http://52.78.25.104:3000/review/host/:userId', {
+    fetch(`http://52.78.25.104:3000/review/host/${gatheringData.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
