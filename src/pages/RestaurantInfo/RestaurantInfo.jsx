@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Map from '../../components/Map';
 import Slide from '../../components/Slide/Slide';
 import { Style } from './RestaurantInfoStyle';
 const RestaurantInfo = () => {
   const [RestaurantInfoData, setRestaurantInfoData] = useState({});
 
+  const { restaurantId } = useParams();
+
   useEffect(() => {
-    fetch('./data/RestaurantInfoData.json')
+    fetch(`http://10.58.52.135:3000/restaurants/info/${restaurantId}`)
       .then(res => res.json())
       .then(data => setRestaurantInfoData(data.data));
-  }, []);
+  }, [restaurantId]);
 
   return (
     <Style.RestaurantInfoBox>

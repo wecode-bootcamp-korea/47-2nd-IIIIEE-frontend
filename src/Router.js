@@ -18,7 +18,10 @@ const Router = () => {
           <Route path="" element={<Main />} />
           <Route path="registration" element={<Registration />} />
           <Route path="gathering" element={<Gathering />} />
-          <Route path="restaurantInfo" element={<RestaurantInfo />} />
+          <Route
+            path="restaurantInfo/:restaurantId"
+            element={<RestaurantInfo />}
+          />
           <Route path="hostList" element={<HoseList />} />
           <Route path="kakakoLogin" element={<KakaoLogin />} />
           <Route path="gestlist" element={<GestList />} />

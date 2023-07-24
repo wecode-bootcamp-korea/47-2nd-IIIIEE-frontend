@@ -36,7 +36,9 @@ const Main = () => {
               </StoreName>
             </StoreMain>
             <Btns>
-              <StoreBtn onClick={() => goToLink('restaurantInfo')}>
+              <StoreBtn
+                onClick={() => goToLink(`restaurantInfo/${storeData.storeId}`)}
+              >
                 맛집 정보
               </StoreBtn>
               <StoreBtn onClick={() => goToLink('registration')}>

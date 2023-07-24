@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
+import { useLocation } from 'react-router-dom';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -18,14 +19,15 @@ const Slide = ({ RestaurantInfoData }) => {
     slidesToScroll: 1,
   };
 
-  const getPathname = window.location.pathname;
+  const location = useLocation();
+  const getPathname = location.pathname;
   const mainPath = getPathname === '/';
 
   return (
     <Style.Slide>
       <CustomSlider {...settings} mainPath={mainPath}>
-        {RestaurantInfoData?.images &&
-          RestaurantInfoData?.images.map(info => (
+        {RestaurantInfoData?.images?.length > 0 &&
+          RestaurantInfoData?.images?.map(info => (
             <div key={info.id}>
               <img src={info.image} alt="img" />
             </div>
