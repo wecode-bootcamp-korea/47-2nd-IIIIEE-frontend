@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import useFetch from '../../hooks/useFetch';
+
 import { FILTERRING_BOX } from './NavData/filterListData';
 
 import { styled } from 'styled-components';
@@ -39,6 +41,16 @@ const FilterList = ({
     setVisible({ ...visible, [name]: innerText });
   };
 
+  const { getData: ageDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/rooms/categories/ages`,
+  );
+  const { getData: genderDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/rooms/categories/genders`,
+  );
+  const { getData: timeDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/rooms/categories/times`,
+  );
+
   return (
     <FilterListBox>
       {openFilterList && (
@@ -56,7 +68,91 @@ const FilterList = ({
             )}
           </div>
 
-          {FILTERRING_BOX &&
+          <div className="filtering">
+            <div className="text" onClick={() => handleListBtn('시간')}>
+              <p>시간</p>
+              <span>{visible.time}</span>
+            </div>
+
+            {openList['시간'] && (
+              <ul>
+                {timeDatas?.data?.map(time => (
+                  <li key={time.id}>
+                    <button
+                      onClick={e => handleClick(e, time.hour)}
+                      value={time.id}
+                      name="time"
+                      style={{
+                        backgroundColor: `${
+                          Number(clickBtn.time) === time.id ? '#fff6d6' : ''
+                        }`,
+                      }}
+                    >
+                      {time.hour}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="filtering">
+            <div className="text" onClick={() => handleListBtn('연령대')}>
+              <p>연령대</p>
+              <span>{visible.age}</span>
+            </div>
+
+            {openList['연령대'] && (
+              <ul>
+                {ageDatas?.data?.map(age => (
+                  <li key={age.id}>
+                    <button
+                      onClick={e => handleClick(e, age.age_range)}
+                      value={age.id}
+                      name="age"
+                      style={{
+                        backgroundColor: `${
+                          Number(clickBtn.age) === age.id ? '#fff6d6' : ''
+                        }`,
+                      }}
+                    >
+                      {age.age_range}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="filtering">
+            <div className="text" onClick={() => handleListBtn('성별')}>
+              <p>성별</p>
+              <span>{visible.gender}</span>
+            </div>
+
+            {openList['성별'] && (
+              <ul>
+                {genderDatas?.data?.map(gender => (
+                  <li key={gender.id}>
+                    <button
+                      onClick={e => handleClick(e, gender.gender)}
+                      value={gender.id}
+                      name="gender"
+                      style={{
+                        backgroundColor: `${
+                          Number(clickBtn.gender) === gender.id ? '#fff6d6' : ''
+                        }`,
+                      }}
+                    >
+                      {gender.gender}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* {FILTERRING_BOX &&
             FILTERRING_BOX.map(data => (
               <div className="filtering" key={data.id}>
                 <div className="text" onClick={() => handleListBtn(data.title)}>
@@ -87,7 +183,7 @@ const FilterList = ({
                   </ul>
                 )}
               </div>
-            ))}
+            ))} */}
         </div>
       )}
     </FilterListBox>
