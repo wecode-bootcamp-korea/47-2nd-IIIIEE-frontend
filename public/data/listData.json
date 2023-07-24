@@ -11,6 +11,7 @@
       "roomDay": "20",
       "hour": "14:00",
       "price": 80000,
+      "roomStatue": 1,
       "guests": [
         { "id": 1, "name": "하대리" },
         { "id": 2, "name": "이주현" }

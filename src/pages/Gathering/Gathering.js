@@ -10,6 +10,7 @@ const Gathering = () => {
   const token = localStorage.getItem('token');
   const [textData, setTextData] = useState({});
   const {
+    roomId,
     roomTitle,
     roomImage,
     price,
@@ -33,7 +34,7 @@ const Gathering = () => {
   }, []);
 
   const applyToGathering = () => {
-    fetch('http://52.78.25.104:3000/rooms', {
+    fetch(`http://52.78.25.104:3000/rooms/${roomId}/join`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
