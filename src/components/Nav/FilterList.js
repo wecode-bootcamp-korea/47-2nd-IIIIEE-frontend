@@ -14,8 +14,6 @@ import moment from 'moment';
 import 'react-calendar/dist/Calendar.css';
 
 const FilterList = ({
-  searchParams,
-  setSearchParams,
   openFilterList,
   CalendarValue,
   onChange,

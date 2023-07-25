@@ -22,9 +22,17 @@ const Nav = () => {
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
+
+  const handleListBlur = e => {
+    setOpenList(false);
+    console.log(e, '블러!!');
+  };
+
   const handleListBtn = () => {
     setOpenList(!openList);
+    console.log('클릭!!');
   };
+  console.log('>>', openList);
 
   const token = localStorage.getItem('token');
 
@@ -32,7 +40,6 @@ const Nav = () => {
     localStorage.removeItem('token');
     navigate('/');
   };
-
   return (
     <div className="Nav">
       <FilterBox />
@@ -40,20 +47,22 @@ const Nav = () => {
         <div className="navMenu ListBtn">
           <FontAwesomeIcon icon={faBars} onClick={handleListBtn} />
           <span>목록</span>
-          {openList && (
-            <ListBox>
-              <li>
-                <Link to="hostlist">
-                  <span>모임 목록</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="gestList">
-                  <span>신청 목록</span>
-                </Link>
-              </li>
-            </ListBox>
-          )}
+          <div onBlur={e => handleListBlur(e)}>
+            {openList && (
+              <ListBox>
+                <li>
+                  <Link to="hostlist">
+                    <span>모임 목록</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="gestList">
+                    <span>신청 목록</span>
+                  </Link>
+                </li>
+              </ListBox>
+            )}
+          </div>
         </div>
         <div className="navMenu logoBtn">
           <Link to="/">
