@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import { styled } from 'styled-components';
 import useModal from '../../hooks/useModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useInputValue from '../../hooks/useInputValue';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -24,9 +24,22 @@ const Registration = () => {
   const [arrTag, setArrTag] = useState([]);
   const [visibleTime, setVisibleTime] = useState('00:00');
   const [afterPost, setAfterPost] = useState(false);
-  const { getData: ageDatas } = useFetch('/data/age.json');
-  const { getData: genderDatas } = useFetch('data/gender.json');
-  const { getData: timeDatas } = useFetch('data/time.json');
+  const [saveRoomId, setSaveRoomId] = useState();
+  const [saveFormdata, setSaveFormdata] = useState({});
+  const { getData: ageDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/rooms/categories/ages`,
+  );
+  const { getData: genderDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/rooms/categories/genders`,
+  );
+  const { getData: timeDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/rooms/categories/times`,
+  );
+  const params = useParams();
+  const restaurant = params.restaurant;
+  const { getData: idDatas } = useFetch(
+    `http://${process.env.REACT_APP_IP}/restaurants/${restaurant}`,
+  );
 
   const token = localStorage.getItem('token');
 
@@ -50,9 +63,9 @@ const Registration = () => {
     setVisibleTime(value);
   };
 
-  const formData = new FormData();
-
-  const saveImgFile = () => {
+  const saveImgFile = e => {
+    const formData = new FormData();
+    setSaveFormdata(e.target.files[0]);
     const file = imgRef.current.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -60,29 +73,23 @@ const Registration = () => {
       setUploadImg(reader.result);
     };
     formData.append('image', file);
-    // console.log(imgRef.current.files[0]);
-    // for (let value of formData.values()) {
-    //   console.log('>>', value);
-    // }
+    formData.append('roomId', saveRoomId);
+    setSaveFormdata(formData);
   };
-
-  const postImg = () => {
-    fetch('http://52.78.25.104:3000/rooms', {
+  const postImg = async () => {
+    await fetch(`http://${process.env.REACT_APP_IP}/rooms/image`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        formData,
-      }),
+      body: saveFormdata,
     })
       .then(response => {
         return response.json();
       })
       .then(data => {
         if (data.message === 'IMAGE_UPLOAD_SUCCESS') {
-          navigate('hostlist');
+          navigate('/hostList');
         } else if (data.message === 'INVALID_DATA') {
           alert('이미지 업로드에 실패했습니다. 다시 확인해주세요.');
         }
@@ -90,15 +97,14 @@ const Registration = () => {
   };
 
   const createRoom = () => {
-    fetch('http://52.78.25.104:3000/rooms', {
+    fetch(`http://${process.env.REACT_APP_IP}/rooms`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        restaurantId: 9,
-        hostId: 3,
+        restaurantId: idDatas.data,
         title: inputValue.title,
         date: value,
         timeId: clickBtn.time,
@@ -114,8 +120,9 @@ const Registration = () => {
         return response.json();
       })
       .then(data => {
-        if (data.message === 'ROOM_CREATED') {
+        if (data) {
           setAfterPost(true);
+          setSaveRoomId(data.data);
         } else if (data.message === 'INVALID_DATA_INPUT') {
           alert('입력사항 다시 확인해주세요.');
         } else if (data.message === 'EXISTED_DATA_INPUT') {
@@ -293,45 +300,47 @@ const Registration = () => {
           })}
         </style.TagBtns>
       </style.TagBtn>
-
-      <style.RegisteBtns>
-        <style.RegisteBtn
-          disabled={!condition}
-          condition={condition}
-          onClick={createRoom}
-        >
-          등록
-        </style.RegisteBtn>
-        <button onClick={cancel}>취소</button>
-      </style.RegisteBtns>
-      <style.ImgBox>
-        <style.FileForm>
-          <label for="file">
-            이 곳을 클릭해 모임을 대표할 사진을 올려주세요.
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            id="file"
-            onChange={saveImgFile}
-            ref={imgRef}
-          />
-        </style.FileForm>
-        <style.GatheringImg
-          src={uploadImg ? uploadImg : './images/logo.png'}
-          alt="모임 이미지"
-        />
+      {!afterPost ? (
         <style.RegisteBtns>
           <style.RegisteBtn
-            disabled={!imgRef?.current?.files[0]?.name}
-            condition={imgRef?.current?.files[0]?.name}
-            onClick={postImg}
+            disabled={!condition}
+            condition={condition}
+            onClick={createRoom}
           >
             등록
           </style.RegisteBtn>
-          <button onClick={cancelImg}>취소</button>
+          <button onClick={cancel}>취소</button>
         </style.RegisteBtns>
-      </style.ImgBox>
+      ) : (
+        <style.ImgBox>
+          <style.FileForm>
+            <label for="file">
+              이 곳을 클릭해 모임을 대표할 사진을 올려주세요.
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              id="file"
+              onChange={saveImgFile}
+              ref={imgRef}
+            />
+          </style.FileForm>
+          <style.GatheringImg
+            src={uploadImg ? uploadImg : '/images/logo.png'}
+            alt="모임 이미지"
+          />
+          <style.RegisteBtns>
+            <style.RegisteBtn
+              disabled={!imgRef?.current?.files[0]?.name}
+              condition={imgRef?.current?.files[0]?.name}
+              onClick={postImg}
+            >
+              등록
+            </style.RegisteBtn>
+            <button onClick={cancelImg}>취소</button>
+          </style.RegisteBtns>
+        </style.ImgBox>
+      )}
     </style.Full>
   );
 };

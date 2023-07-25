@@ -20,6 +20,7 @@ const Style = {
     background-color: #ff914d;
     color: white;
     font-size: 1.5em;
+    opacity: ${props => (props.applyBtnCondition ? 1 : 0.5)};
   `,
 
   Container: styled.div`

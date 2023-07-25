@@ -5,37 +5,33 @@ import Style from './GatheringStyle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import useRequireAuth from '../../hooks/useRequireAuth';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Gathering = () => {
   const loading = useRequireAuth();
   const token = localStorage.getItem('token');
   const [textData, setTextData] = useState({});
-  const {
-    roomId,
-    roomTitle,
-    roomImage,
-    price,
-    gender,
-    ageRange,
-    roomTag,
-    roomContent,
-    roomYear,
-    roomMonth,
-    roomDay,
-    reservationTime,
-    numberOfRoomPeople,
-    roomMaxPeople,
-  } = textData;
+
   const [checkBell, setCheckBell] = useState(false);
+  const params = useParams();
+  const room = params.room;
+  const navigate = useNavigate();
+  const applyBtnCondition = textData?.roomStatusId === 1;
 
   useEffect(() => {
-    fetch('/data/gathering.json')
+    fetch(`http://${process.env.REACT_APP_IP}/rooms/info/${room}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(response => response.json())
       .then(result => setTextData(result.data));
-  }, []);
+  }, [room]);
 
   const applyToGathering = () => {
-    fetch(`http://52.78.25.104:3000/rooms/${roomId}/join`, {
+    fetch(`http://${process.env.REACT_APP_IP}/rooms/${room}/joinRoom`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,16 +41,12 @@ const Gathering = () => {
       .then(response => {
         return response.json();
       })
-      .then(data => {
-        if (data.message === 'User added to room') {
-          navigator('gestlist');
-        } else if (data.message === 'ROOM_FULL') {
-          alert('이미 예약 인원이 꽉 찼어요.');
-        } else if (data.message === 'USER_ALREADY_IN_ROOM') {
-          alert('이미 신청되었습니다.');
-        } else if (data.message === 'CANNOT_JOIN_ROOM') {
-          alert('조건에 맞지 않네요 다른 방을 찾아주세요');
+      .then(({ message }) => {
+        if (GATHERING_ERRORS[message]) {
+          alert(message);
+          return;
         }
+        navigate('/gestlist');
       });
   };
 
@@ -64,11 +56,15 @@ const Gathering = () => {
 
   return (
     <Style.Full>
-      <Style.GatheringImg src={roomImage} alt="gatheringImg" />
-      <Style.RoomTitle>{roomTitle}</Style.RoomTitle>
+      <Style.GatheringImg src={textData?.roomImage} alt="gatheringImg" />
+      <Style.RoomTitle>{textData?.roomTitle}</Style.RoomTitle>
 
-      <Tag gender={gender} ageRange={ageRange} tags={roomTag} />
-      <p>{roomContent}</p>
+      <Tag
+        gender={textData?.roomGender}
+        ageRange={textData?.roomAgeRange}
+        tags={textData?.roomTag}
+      />
+      <p>{textData?.roomContent}</p>
       <Style.Top>
         <Style.Container
           checkBell={checkBell}
@@ -81,20 +77,28 @@ const Gathering = () => {
         </Style.Container>
         <Style.Container>
           <p>
-            {roomYear}.{roomMonth}.{roomDay}
+            {textData?.roomYear}.{textData?.roomMonth}.{textData?.roomDay}
           </p>
         </Style.Container>
         <Style.Container>
-          <p>{reservationTime}</p>
+          <p>{textData?.reservationTime}</p>
         </Style.Container>
       </Style.Top>
       <Style.Top>
         <Style.Container>
-          현재인원 : {numberOfRoomPeople}/{roomMaxPeople} 명
+          현재인원 : {textData?.numberOfRoomPeople}/{textData?.roomMaxPeople} 명
         </Style.Container>
-        <Style.Container>총 금액 : {price?.toLocaleString()}원</Style.Container>
+        <Style.Container>
+          총 금액 : {Math.floor(textData?.totalPrice)?.toLocaleString()}원
+        </Style.Container>
       </Style.Top>
-      <Style.AddBtn onClick={applyToGathering}>신청하기</Style.AddBtn>
+      <Style.AddBtn
+        onClick={applyToGathering}
+        disabled={!applyBtnCondition}
+        applyBtnCondition={applyBtnCondition}
+      >
+        신청하기
+      </Style.AddBtn>
       <Style.Border />
       <Host textData={textData} />
     </Style.Full>
@@ -102,3 +106,9 @@ const Gathering = () => {
 };
 
 export default Gathering;
+
+const GATHERING_ERRORS = {
+  ROOM_FULL: '이미 예약 인원이 꽉 찼어요.',
+  USER_ALREADY_IN_ROOM: '이미 신청되었습니다.',
+  CANNOT_JOIN_ROOM: '조건에 맞지 않네요 다른 방을 찾아주세요',
+};

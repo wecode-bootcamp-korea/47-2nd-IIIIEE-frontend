@@ -41,6 +41,7 @@ const HostListStyle = {
 
   RegistrationBtn: styled.button`
     background-color: ${props => props.theme.mainColor};
+    opacity: ${props => (props.colorCondition ? 0.5 : 1)};
     color: white;
     border: 0px;
     border-radius: 7px;

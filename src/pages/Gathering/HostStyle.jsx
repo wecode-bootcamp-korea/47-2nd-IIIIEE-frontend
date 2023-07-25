@@ -60,6 +60,12 @@ const Style = {
     padding: 1em 0em;
   `,
 
+  ReviewBox: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  `,
+
   ReviewDetail: styled.div`
     display: flex;
     flex-direction: column;
