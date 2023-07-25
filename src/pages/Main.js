@@ -73,7 +73,7 @@ const Main = () => {
 
   return (
     <Full>
-      {restaurantList.map((storeData, idx) => {
+      {restaurantList?.map((storeData, idx) => {
         return (
           <div key={storeData.restaurantId}>
             <StoreMain
@@ -93,16 +93,24 @@ const Main = () => {
               >
                 맛집 정보
               </StoreBtn>
-              <StoreBtn onClick={() => goToLink(`registration`)}>
+              <StoreBtn
+                onClick={() =>
+                  goToLink(`registration/${storeData.restaurantId}`)
+                }
+              >
                 모임 등록
               </StoreBtn>
             </Btns>
             {isOpen[storeData.restaurantId] && (
               <div>
-                {restaurantList.roomData.map(gatheringData => {
+                {storeData.roomData?.map(gatheringData => {
                   return (
                     <Lists key={gatheringData.roomId}>
-                      <p onClick={() => goToLink(`gathering`)}>
+                      <p
+                        onClick={() =>
+                          goToLink(`gathering/${gatheringData.roomId}`)
+                        }
+                      >
                         {gatheringData.roomTitle}
                       </p>
                     </Lists>

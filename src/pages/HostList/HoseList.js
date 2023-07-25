@@ -7,31 +7,30 @@ const HoseList = () => {
   const [listData, setListData] = useState([]);
   const REACT_APP_SERVICE_APP_ADMIN_KEY =
     process.env.REACT_APP_SERVICE_APP_ADMIN_KEY;
-  // const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    fetch('./data/listData.json')
-      // fetch('http://52.78.25.104:3000/rooms/host', {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // })
+    // fetch('./data/listData.json')
+    fetch(`http://${process.env.REACT_APP_IP}/rooms/host`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(response => response.json())
       .then(result => setListData(result.data));
   }, []);
-
   const goToPay = idx => {
     fetch(`https://kapi.kakao.com/v1/payment/ready`, {
       method: 'POST',
       body: new URLSearchParams({
         cid: 'TC0ONETIME',
-        partner_order_id: listData[idx]?.roomId,
-        partner_user_id: 'token',
-        item_name: listData[idx]?.roomTitle,
+        partner_order_id: 'partner_order_id',
+        partner_user_id: 'partner_user_id',
+        item_name: listData[idx]?.roomId.toString(),
         quantity: 1,
-        total_amount: listData[idx]?.price,
+        total_amount: Math.floor(listData[idx]?.totalPrice),
         tax_free_amount: 0,
         approval_url: `http://localhost:3000/kakaopay?partner_order_id=${listData[idx]?.roomId}`,
         cancel_url: 'http://localhost:3000/payFail',
@@ -59,46 +58,52 @@ const HoseList = () => {
 
   return (
     <HostListStyle.Full>
-      {listData.map((list, idx) => {
+      {listData?.map((list, idx) => {
         const {
           roomId,
           roomTitle,
           guests,
-          price,
+          totalPrice,
           hour,
-          roomYear,
-          roomMonth,
-          roomDay,
-          roomStatue,
+          date,
+          roomStatusId,
         } = list;
+        const newDate = date.substr(0, 10);
         return (
           <HostListStyle.Container key={roomId}>
             <HostListStyle.Title>{roomTitle}</HostListStyle.Title>
             <HostListStyle.GatheringData>
-              <p>
-                {roomYear}년 {roomMonth}월 {roomDay}일
-              </p>
+              <p>{newDate}</p>
               <p>{hour}</p>
-              <p>{price?.toLocaleString()}원</p>
+              <p>{Math.floor(totalPrice).toLocaleString()}원</p>
             </HostListStyle.GatheringData>
-            {guests.map(guest => {
-              return (
-                <HostListStyle.Guest key={guest.id}>
-                  <p>{guest.name}</p>
-                  <HostListStyle.GuestBtn>
-                    <HostListStyle.AgreeBtn>수락</HostListStyle.AgreeBtn>
-                    <HostListStyle.RefuseBtn>거절</HostListStyle.RefuseBtn>
-                  </HostListStyle.GuestBtn>
-                </HostListStyle.Guest>
-              );
-            })}
+            {guests[0].id === null ? (
+              <div>신청 인원이 없어요. 조금만 기다려주세요.</div>
+            ) : (
+              guests.map(guest => {
+                return (
+                  <HostListStyle.Guest key={guest.id}>
+                    <p>{guest.name}</p>
+                    {roomStatusId !== 3 && (
+                      <HostListStyle.GuestBtn>
+                        <HostListStyle.AgreeBtn>수락</HostListStyle.AgreeBtn>
+                        <HostListStyle.RefuseBtn>거절</HostListStyle.RefuseBtn>
+                      </HostListStyle.GuestBtn>
+                    )}
+                  </HostListStyle.Guest>
+                );
+              })
+            )}
 
-            {roomStatue !== 3 && (
-              <HostListStyle.RegistrationBtn onClick={() => goToPay(idx)}>
+            {roomStatusId !== 3 ? (
+              <HostListStyle.RegistrationBtn
+                onClick={() => goToPay(idx)}
+                disabled={roomStatusId !== 2}
+                colorCondition={roomStatusId !== 2}
+              >
                 예약하기
               </HostListStyle.RegistrationBtn>
-            )}
-            {roomStatue === 3 && (
+            ) : (
               <HostListStyle.Complete>예약완료</HostListStyle.Complete>
             )}
           </HostListStyle.Container>
