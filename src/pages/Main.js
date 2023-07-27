@@ -60,10 +60,6 @@ const Main = () => {
     setIsOpen(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const goToRestaurantInfo = id => {
-    navigate(`/restaurantInfo/${id}/`);
-  };
-
   const goToLink = url => {
     navigate(url);
   };
@@ -82,14 +78,16 @@ const Main = () => {
                 handleModal(storeData.restaurantId);
               }}
             >
-              <SlideStyle RestaurantInfoData={restaurantList[idx]} />
+              <SlideStyle restaurantInfoData={restaurantList[idx]} />
               <StoreName>
                 <NameColor>{storeData.restaurantName}</NameColor>
               </StoreName>
             </StoreMain>
             <Btns>
               <StoreBtn
-                onClick={() => goToRestaurantInfo(storeData.restaurantId)}
+                onClick={() =>
+                  goToLink(`restaurantInfo/${storeData.restaurantId}`)
+                }
               >
                 맛집 정보
               </StoreBtn>

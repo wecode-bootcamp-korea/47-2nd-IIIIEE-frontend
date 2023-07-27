@@ -15,7 +15,6 @@ const Nav = () => {
   const navigate = useNavigate();
   const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
   const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const handleLogin = () => {
@@ -48,6 +47,11 @@ const Nav = () => {
     };
   }, []);
 
+  const goToLink = url => {
+    navigate(url);
+    setOpenList(false);
+  };
+
   return (
     <div className="Nav">
       <FilterBox />
@@ -58,14 +62,10 @@ const Nav = () => {
           {openList && (
             <ListBox ref={listBoxRef}>
               <li>
-                <Link to="hostlist">
-                  <span>모임 목록</span>
-                </Link>
+                <span onClick={() => goToLink('hostlist')}>모임 목록</span>
               </li>
               <li>
-                <Link to="gustList">
-                  <span>신청 목록</span>
-                </Link>
+                <span onClick={() => goToLink('guestList')}>신청 목록</span>
               </li>
             </ListBox>
           )}
@@ -151,15 +151,7 @@ const ListBox = styled.ul`
     justify-content: center;
     height: 50%;
     border-top: 1px solid #e9ecef;
-
-    a {
-      display: block;
-      width: 100%;
-      height: 100%;
-      text-decoration: none;
-      font-size: 1.5em;
-      text-align: center;
-      line-height: 3.5em;
-    }
+    font-size: 1.5em;
+    text-align: center;
   }
 `;

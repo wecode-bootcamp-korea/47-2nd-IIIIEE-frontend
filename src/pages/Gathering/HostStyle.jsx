@@ -47,6 +47,9 @@ const Style = {
     padding: 10px 0px;
     text-align: justify;
   `,
+  PaddingTop: styled.p`
+    padding-top: 0.5em;
+  `,
 
   Bold: styled.p`
     font-weight: 700;

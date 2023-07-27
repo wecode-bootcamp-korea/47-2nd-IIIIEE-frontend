@@ -26,8 +26,8 @@ const Slide = ({ restaurantInfoData }) => {
   return (
     <Style.Slide>
       <CustomSlider {...settings} mainPath={mainPath}>
-        {restaurantInfoData?.images?.length > 0 &&
-          restaurantInfoData?.images?.map(info => (
+        {restaurantInfoData?.restaurantImage?.length > 0 &&
+          restaurantInfoData?.restaurantImage?.map(info => (
             <div key={info.id}>
               <img src={info.image} alt="img" />
             </div>
