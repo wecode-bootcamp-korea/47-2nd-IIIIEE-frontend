@@ -38,10 +38,6 @@ const EachTags = styled.div`
   color: white;
 `;
 
-// const Tags = styled.div`
-//   display: flex;
-//   gap: 10px;
-// `;
 const Cathegorys = styled.div`
   display: flex;
   gap: 10px;

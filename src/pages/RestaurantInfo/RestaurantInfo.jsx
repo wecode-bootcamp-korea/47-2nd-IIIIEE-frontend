@@ -5,6 +5,7 @@ import Slide from '../../components/Slide/Slide';
 import { Style } from './RestaurantInfoStyle';
 const RestaurantInfo = () => {
   const [restaurantInfoData, setRestaurantInfoData] = useState({});
+
   const { restaurantId } = useParams();
 
   useEffect(() => {

@@ -69,7 +69,6 @@ const Host = ({ textData }) => {
   // };
 
   const textWritingCondition = 1;
-  // reviewData.filter(textData.guestName);
 
   return (
     <Style.All>
@@ -115,37 +114,38 @@ const Host = ({ textData }) => {
         {isOpen && (
           <>
             <Style.AddReview>
-              {textData.roomStatusId === 3 && (
-                <Style.ReviewBox>
-                  <Style.Name>
-                    <Style.Bold>{textData.guestName}</Style.Bold>
-                    <Style.AllStar>
-                      {starArr?.map((star, idx) => {
-                        return (
-                          <Style.AllStar star={star <= rate} key={idx}>
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              onClick={() => reactionStar(star)}
-                            />
-                          </Style.AllStar>
-                        );
-                      })}
-                    </Style.AllStar>
-                  </Style.Name>
-                  <Style.TestArea>
-                    <Style.TextInput
-                      value={addReviewText}
-                      onChange={e => handleReview(e)}
-                    />
-                    <button
-                      onClick={createReview}
-                      disabled={!textWritingCondition}
-                    >
-                      작성
-                    </button>
-                  </Style.TestArea>
-                </Style.ReviewBox>
-              )}
+              {textData.roomStatusId === 3 &&
+                textData.guestName !== textData.hostName && (
+                  <Style.ReviewBox>
+                    <Style.Name>
+                      <Style.Bold>{textData.guestName}</Style.Bold>
+                      <Style.AllStar>
+                        {starArr?.map((star, idx) => {
+                          return (
+                            <Style.AllStar star={star <= rate} key={idx}>
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                onClick={() => reactionStar(star)}
+                              />
+                            </Style.AllStar>
+                          );
+                        })}
+                      </Style.AllStar>
+                    </Style.Name>
+                    <Style.TestArea>
+                      <Style.TextInput
+                        value={addReviewText}
+                        onChange={e => handleReview(e)}
+                      />
+                      <button
+                        onClick={createReview}
+                        disabled={!textWritingCondition}
+                      >
+                        작성
+                      </button>
+                    </Style.TestArea>
+                  </Style.ReviewBox>
+                )}
               {/* {visibleReview.map((review, idx) => {
                 let guestStar = Array.from({ length: rate }, () => 0);
                 return (
@@ -166,25 +166,29 @@ const Host = ({ textData }) => {
                 );
               })} */}
             </Style.AddReview>
-            {reviewData?.map((hostreview, idx) => {
-              let guestStar = Array.from(
-                { length: hostreview.rating },
-                () => 0,
-              );
-              return (
-                <Style.ReviewDetail key={idx}>
-                  <Style.Name>
-                    <Style.Bold>{hostreview?.guestName}</Style.Bold>
-                    <Style.GuestStar>
-                      {guestStar.map((star, idx) => {
-                        return <FontAwesomeIcon key={idx} icon={faStar} />;
-                      })}
-                    </Style.GuestStar>
-                  </Style.Name>
-                  <Style.Detail>{hostreview?.content}</Style.Detail>
-                </Style.ReviewDetail>
-              );
-            })}
+            {reviewData.length === 0 ? (
+              <Style.PaddingTop>아직 후기가 없습니다.</Style.PaddingTop>
+            ) : (
+              reviewData?.map((hostreview, idx) => {
+                let guestStar = Array.from(
+                  { length: hostreview.rating },
+                  () => 0,
+                );
+                return (
+                  <Style.ReviewDetail key={idx}>
+                    <Style.Name>
+                      <Style.Bold>{hostreview?.guestName}</Style.Bold>
+                      <Style.GuestStar>
+                        {guestStar.map((star, idx) => {
+                          return <FontAwesomeIcon key={idx} icon={faStar} />;
+                        })}
+                      </Style.GuestStar>
+                    </Style.Name>
+                    <Style.Detail>{hostreview?.content}</Style.Detail>
+                  </Style.ReviewDetail>
+                );
+              })
+            )}
           </>
         )}
       </div>

@@ -43,6 +43,30 @@ const Registration = () => {
 
   const token = localStorage.getItem('token');
 
+  //달력 리팩토링 예정
+  // const dateValue = new Date(value);
+  // const beforeDate = dateValue < new Date();
+  // // const beforeTime = dateValue.toString().slice(5, 10);
+  // console.log(new Date(value));
+  // console.log('>>', new Date());
+  // console.log('이전', beforeDate);
+  // // console.log('시간', beforeTime);
+
+  // const disableButton = () => {
+  //   const tomorrow = new Date();
+  //   tomorrow.setDate(tomorrow.getDate() + 1);
+  //   const twoWeeksLater = new Date();
+  //   twoWeeksLater.setDate(tomorrow.getDate() + 14);
+  //   // return dateValue >= tomorrow && dateValue <= twoWeeksLater;
+  // };
+
+  // const tileDisabled = ({ date }) => {
+  //   const today = new Date();
+  //   const twoWeeksLater = new Date();
+  //   twoWeeksLater.setDate(today.getDate() + 14);
+  //   return date < today || date > twoWeeksLater;
+  // };
+
   const initInput = {
     title: '',
     num: '1',
@@ -198,7 +222,11 @@ const Registration = () => {
       </style.ModalBtn>
       {isOpen && (
         <style.DateBox>
-          <StyledCalendar onChange={onChange} value={value} />
+          <StyledCalendar
+            onChange={onChange}
+            value={value}
+            // beforeDate={beforeDate}
+          />
           <style.TagBtns>
             {timeDatas?.data?.map(time => {
               return (
@@ -374,5 +402,11 @@ const StyledCalendar = styled(Calendar)`
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {
     border-radius: 10em;
+  }
+  .react-calendar__month-view__days {
+    button {
+      background-color: ${props =>
+        props.beforeDate ? 'lightgray' : 'none'} !important;
+    }
   }
 `;
