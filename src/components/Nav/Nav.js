@@ -63,7 +63,7 @@ const Nav = () => {
                 </Link>
               </li>
               <li>
-                <Link to="gestList">
+                <Link to="gustList">
                   <span>신청 목록</span>
                 </Link>
               </li>

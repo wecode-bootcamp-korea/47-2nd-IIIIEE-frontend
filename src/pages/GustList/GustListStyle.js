@@ -1,10 +1,17 @@
 import { styled } from 'styled-components';
 
-export const GestListStyle = {
-  GestListBox: styled.div`
+export const GustListStyle = {
+  GustListBox: styled.div`
     display: flex;
     flex-direction: column;
     padding: 75px 1em 1em 1em;
+  `,
+
+  DataNull: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   `,
 
   Container: styled.div`
