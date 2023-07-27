@@ -47,6 +47,6 @@ const CustomSlider = styled(Slider)`
     display: none !important;
   }
   .slick-dots {
-    display: ${props => props.mainPath && 'none !important'};
+    display: ${props => (props.mainPath ? 'none !important' : 'block')};
   }
 `;
