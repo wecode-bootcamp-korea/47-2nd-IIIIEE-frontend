@@ -69,7 +69,7 @@ const FilterBox = () => {
     <>
       <Filter>
         <FilterTop className="filterTop">
-          {!location.pathname === '/' && (
+          {location.pathname !== '/' && (
             <button onClick={() => window.history.back()}>
               <FontAwesomeIcon icon={faChevronLeft} />
               이전
