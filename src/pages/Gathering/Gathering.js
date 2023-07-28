@@ -46,7 +46,7 @@ const Gathering = () => {
           alert(message);
           return;
         }
-        navigate('/gustlist');
+        navigate('/guestlist');
       });
   };
 

@@ -65,7 +65,7 @@ const Nav = () => {
                 <span onClick={() => goToLink('hostlist')}>모임 목록</span>
               </li>
               <li>
-                <span onClick={() => goToLink('guestList')}>신청 목록</span>
+                <span onClick={() => goToLink('guestlist')}>신청 목록</span>
               </li>
             </ListBox>
           )}

@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
-export const GustListStyle = {
-  GustListBox: styled.div`
+export const GuestListStyle = {
+  GuestListBox: styled.div`
     display: flex;
     flex-direction: column;
     padding: 75px 1em 1em 1em;
