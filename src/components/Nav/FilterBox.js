@@ -69,10 +69,12 @@ const FilterBox = () => {
     <>
       <Filter>
         <FilterTop className="filterTop">
-          <button onClick={() => window.history.back()}>
-            <FontAwesomeIcon icon={faChevronLeft} />
-            이전
-          </button>
+          {!location.pathname === '/' && (
+            <button onClick={() => window.history.back()}>
+              <FontAwesomeIcon icon={faChevronLeft} />
+              이전
+            </button>
+          )}
           {location.pathname === '/' && (
             <div className="filterSearch" onClick={handleFilterListBtn}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -163,7 +165,7 @@ const FilterTop = styled.div`
   .filterSearch {
     display: flex;
     align-items: center;
-    width: 85%;
+    width: 100%;
     height: 3em;
     border: 1px solid #e9ecef;
     border-radius: 2em;
