@@ -7,7 +7,7 @@ import Registration from './pages/Registration/Registration';
 import RestaurantInfo from './pages/RestaurantInfo/RestaurantInfo';
 import HoseList from './pages/HostList/HoseList';
 import KakaoLogin from './components/Nav/KakaoLogin';
-import GustList from './pages/GustList/GustList';
+import GuestList from './pages/GuestList/GuestList';
 import PayFail from './pages/HostList/PayFail';
 import KakaoPay from './pages/HostList/KakaoPay';
 import NotFound from './pages/NotFound/NotFound';
@@ -31,7 +31,7 @@ const Router = () => {
           <Route path="registration" element={<Registration />} />
           <Route path="gathering/:roomId" element={<Gathering />} />
           <Route path="hostList" element={<HoseList />} />
-          <Route path="gustlist" element={<GustList />} />
+          <Route path="guestlist" element={<GuestList />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

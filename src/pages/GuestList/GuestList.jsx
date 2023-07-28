@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GustListStyle } from './GustListStyle';
+import { GuestListStyle } from './GuestListStyle';
 import useRequireAuth from '../../hooks/useRequireAuth';
 
-const GustList = () => {
+const GuestList = () => {
   const loading = useRequireAuth();
-  const [gustListData, setGustListData] = useState([]);
+  const [guestListData, setGuestListData] = useState([]);
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
@@ -19,7 +19,7 @@ const GustList = () => {
       },
     })
       .then(response => response.json())
-      .then(result => setGustListData(result.data));
+      .then(result => setGuestListData(result.data));
   }, []);
 
   const goToLink = roomId => {
@@ -31,29 +31,29 @@ const GustList = () => {
   }
 
   return (
-    <GustListStyle.GustListBox>
-      {gustListData.length === 0 ? (
-        <GustListStyle.DataNull>
+    <GuestListStyle.GuestListBox>
+      {guestListData.length === 0 ? (
+        <GuestListStyle.DataNull>
           신청하신 내역이 없습니다.
-        </GustListStyle.DataNull>
+        </GuestListStyle.DataNull>
       ) : (
-        gustListData?.map(info => (
-          <GustListStyle.Container key={info.roomId}>
-            <GustListStyle.Title>{info.roomTitle}</GustListStyle.Title>
-            <GustListStyle.GatheringData>
+        guestListData?.map(info => (
+          <GuestListStyle.Container key={info.roomId}>
+            <GuestListStyle.Title>{info.roomTitle}</GuestListStyle.Title>
+            <GuestListStyle.GatheringData>
               <p>{info.date.split('T')[0]}</p>
               <p>{info.hour}</p>
-            </GustListStyle.GatheringData>
-            <GustListStyle.RegistrationBtn
+            </GuestListStyle.GatheringData>
+            <GuestListStyle.RegistrationBtn
               onClick={() => goToLink(info.roomId)}
             >
               {info.roomStatus === 'PURCHASED' ? '후기 작성' : '모임 정보'}
-            </GustListStyle.RegistrationBtn>
-          </GustListStyle.Container>
+            </GuestListStyle.RegistrationBtn>
+          </GuestListStyle.Container>
         ))
       )}
-    </GustListStyle.GustListBox>
+    </GuestListStyle.GuestListBox>
   );
 };
 
-export default GustList;
+export default GuestList;
